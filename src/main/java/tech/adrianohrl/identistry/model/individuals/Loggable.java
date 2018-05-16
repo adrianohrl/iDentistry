@@ -5,6 +5,8 @@
  */
 package tech.adrianohrl.identistry.model.individuals;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import java.util.Calendar;
 
 /**
@@ -29,6 +31,11 @@ public abstract class Loggable extends Person {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+    
+    public boolean authenticate(String username, char[] password) {
+        Argon2 argon2 = Argon2Factory.create();
+        return this.username.equals(username) && argon2.verify(this.password, password);
     }
 
     @Override

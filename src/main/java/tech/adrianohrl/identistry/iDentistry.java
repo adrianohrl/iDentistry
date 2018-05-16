@@ -5,24 +5,38 @@
  */
 package tech.adrianohrl.identistry;
 
-import tech.adrianohrl.identistry.model.dentitions.Dentition;
-import tech.adrianohrl.identistry.model.dentitions.factory.DeciduousDentitionFactory;
-import tech.adrianohrl.identistry.model.dentitions.factory.DentitionFactory;
-import tech.adrianohrl.identistry.model.dentitions.factory.PermanentDentitionFactory;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import tech.adrianohrl.identistry.view.LoginDialog;
 
 /**
  *
  * @author adrianohrl
  */
 public class iDentistry {
-    
+
     public static void main(String[] args) {
-        DentitionFactory factory = new DeciduousDentitionFactory();
-        Dentition dentition = factory.create();
-        System.out.println("" + dentition + "\n\n");
-        factory = new PermanentDentitionFactory();
-        dentition = factory.create();
-        System.out.println("" + dentition + "\n\n");
+        final JFrame frame = new JFrame("JDialog Demo");
+        final JButton btnLogin = new JButton("Click to login");
+ 
+        btnLogin.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        LoginDialog loginDlg = new LoginDialog(frame);
+                        loginDlg.setVisible(true);
+                        // if logon successfully
+                        if(loginDlg.isSucceeded()){
+                            btnLogin.setText("Hi " + loginDlg.getUsername() + "!");
+                        }
+                    }
+                });
+ 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 100);
+        frame.setLayout(new FlowLayout());
+        frame.getContentPane().add(btnLogin);
+        frame.setVisible(true);
     }
     
 }
