@@ -5,6 +5,11 @@
  */
 package tech.adrianohrl.identistry;
 
+import tech.adrianohrl.identistry.model.dentitions.Dentition;
+import tech.adrianohrl.identistry.model.dentitions.factory.DeciduousDentitionFactory;
+import tech.adrianohrl.identistry.model.dentitions.factory.DentitionFactory;
+import tech.adrianohrl.identistry.model.dentitions.factory.PermanentDentitionFactory;
+
 /**
  *
  * @author adrianohrl
@@ -12,7 +17,12 @@ package tech.adrianohrl.identistry;
 public class iDentistry {
     
     public static void main(String[] args) {
-        
+        DentitionFactory factory = new DeciduousDentitionFactory();
+        Dentition dentition = factory.create();
+        System.out.println("" + dentition + "\n\n");
+        factory = new PermanentDentitionFactory();
+        dentition = factory.create();
+        System.out.println("" + dentition + "\n\n");
     }
     
 }
