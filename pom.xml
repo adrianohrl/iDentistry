@@ -3,10 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     
     <name>iDentistry</name>
+    <description>iDentistry Swing Application</description>
+    <url>https://github.com/adrianohrl/iDentistry</url>
     <groupId>tech.adrianohrl</groupId>
     <artifactId>identistry</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
+    
+    <developers>
+        <developer>
+            <id>adrianohrl</id>
+            <name>Adriano Henrique Rossette Leite</name>
+            <email>contact@adrianohrl.tech</email>
+        </developer>
+    </developers>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,15 +37,27 @@
     
     <dependencies>
         <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm</artifactId>
+            <version>2.4</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>5.0.6.RELEASE</version>
         </dependency>
         
         <dependency>
-            <groupId>de.mkammerer</groupId>
-            <artifactId>argon2-jvm</artifactId>
-            <version>2.4</version>
+            <groupId>com.github.jiconfont</groupId>
+            <artifactId>jiconfont-swing</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.github.jiconfont</groupId>
+            <artifactId>jiconfont-bundle</artifactId>
+            <version>1.2.1</version>
         </dependency>
         
         <dependency>
