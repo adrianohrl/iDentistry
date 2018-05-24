@@ -6,12 +6,14 @@ package tech.adrianohrl.identistry.view.dialogs;
  * and open the template in the editor.
  */
 
-
-import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.event.EventListenerList;
 import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import tech.adrianohrl.identistry.Session;
+import tech.adrianohrl.identistry.view.events.UserLoginEvent;
+import tech.adrianohrl.identistry.view.events.UserLoginEventListener;
 
 /**
  *
@@ -19,15 +21,44 @@ import tech.adrianohrl.identistry.Session;
  */
 public class LoginDialog extends javax.swing.JDialog {
     
-    private Session session;
+    private final Session session = new Session();
+    protected EventListenerList listenerList = new EventListenerList();
+    private static final Logger logger = Logger.getLogger(LoginDialog.class);
 
     /**
      * Creates new form LoginDialog
+     * @param parent
+     * @param modal
      */
-    public LoginDialog(java.awt.Frame parent, boolean modal, Session session) {
+    public LoginDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.session = session;
+    }
+    
+    public void addUserLoginEventListener(UserLoginEventListener listener) {
+        listenerList.add(UserLoginEventListener.class, listener);
+    }
+    
+    public void removeMyEventListener(UserLoginEventListener listener) {
+        listenerList.remove(UserLoginEventListener.class, listener);
+    }
+    
+    private void userLoggedIn(UserLoginEvent evt) {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = 0; i < listeners.length; i += 2) {
+            if (listeners[i] == UserLoginEventListener.class) {
+                ((UserLoginEventListener) listeners[i+1]).userLoggedIn(evt);
+            }
+        }
+    }
+    
+    private void userLoggedOut(UserLoginEvent evt) {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = 0; i < listeners.length; i += 2) {
+            if (listeners[i] == UserLoginEventListener.class) {
+                ((UserLoginEventListener) listeners[i+1]).userLoggedOut(evt);
+            }
+        }
     }
 
     /**
@@ -53,22 +84,33 @@ public class LoginDialog extends javax.swing.JDialog {
         passwordField = new javax.swing.JPasswordField();
         passwordMessageLabel = new javax.swing.JLabel();
         passwordLabel = new javax.swing.JLabel();
+        logoLabel = new javax.swing.JLabel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("iDentistry Login");
         setAlwaysOnTop(true);
+        setIconImage(null);
         setLocationByPlatform(true);
         setModal(true);
+        setName("loginDialog"); // NOI18N
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         mainPanel.setToolTipText("");
         mainPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         mainPanel.setName(""); // NOI18N
+        mainPanel.setNextFocusableComponent(usernameField);
 
         okButton.setIcon(IconFontSwing.buildIcon(FontAwesome.SIGN_IN, 16));
         okButton.setText("Ok");
-        okButton.setToolTipText("Click for validating the input username and password to log into iDentistry.");
+        okButton.setToolTipText("Click for validating the input username and password to log into the iDentistry application.");
         okButton.setMaximumSize(new java.awt.Dimension(100, 30));
         okButton.setMinimumSize(new java.awt.Dimension(100, 30));
+        okButton.setNextFocusableComponent(cancelButton);
         okButton.setPreferredSize(new java.awt.Dimension(100, 30));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,14 +120,18 @@ public class LoginDialog extends javax.swing.JDialog {
 
         cancelButton.setIcon(IconFontSwing.buildIcon(FontAwesome.TIMES, 16));
         cancelButton.setText("Cancel");
+        cancelButton.setToolTipText("Click for canceling the login and closing the iDentistry application.");
         cancelButton.setMaximumSize(new java.awt.Dimension(100, 30));
         cancelButton.setMinimumSize(new java.awt.Dimension(100, 30));
+        cancelButton.setNextFocusableComponent(usernameField);
         cancelButton.setPreferredSize(new java.awt.Dimension(100, 30));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
             }
         });
+
+        buttonsSeparator.setName(""); // NOI18N
 
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
         buttonsPanel.setLayout(buttonsPanelLayout);
@@ -110,18 +156,21 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addGap(0, 0, 0)
                 .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        usernameLabel.setLabelFor(usernameField);
         usernameLabel.setText("Username *:");
 
+        usernameField.setToolTipText("Enter the username.");
         usernameField.setMaximumSize(new java.awt.Dimension(150, 25));
         usernameField.setMinimumSize(new java.awt.Dimension(150, 25));
+        usernameField.setNextFocusableComponent(passwordField);
         usernameField.setPreferredSize(new java.awt.Dimension(150, 25));
 
         usernameMessageLabel.setForeground(new java.awt.Color(255, 0, 0));
         usernameMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        usernameMessageLabel.setLabelFor(usernameField);
         usernameMessageLabel.setText(" ");
         usernameMessageLabel.setToolTipText("The input username does not exist in the database.");
 
@@ -148,15 +197,21 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        usernameField.getAccessibleContext().setAccessibleDescription("");
+
+        passwordField.setToolTipText("Enter the username's password.");
         passwordField.setMaximumSize(new java.awt.Dimension(150, 25));
         passwordField.setMinimumSize(new java.awt.Dimension(150, 25));
+        passwordField.setNextFocusableComponent(okButton);
         passwordField.setPreferredSize(new java.awt.Dimension(150, 25));
 
         passwordMessageLabel.setForeground(new java.awt.Color(255, 0, 0));
         passwordMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        passwordMessageLabel.setLabelFor(passwordField);
         passwordMessageLabel.setText(" ");
         passwordMessageLabel.setToolTipText("The input password does not math this usernames password.");
 
+        passwordLabel.setLabelFor(passwordField);
         passwordLabel.setText("Password *:");
 
         javax.swing.GroupLayout passwordPanelLayout = new javax.swing.GroupLayout(passwordPanel);
@@ -183,25 +238,36 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        logoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo/64x64.png"))); // NOI18N
+        logoLabel.setToolTipText("iDentistry by AdrianoHRL.");
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(usernamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(buttonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(passwordPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(usernamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(passwordPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(usernamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(passwordPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(usernamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(passwordPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(buttonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -213,34 +279,35 @@ public class LoginDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        session.close();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        System.exit(0);
+        logger.debug("Canceled login.");
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         usernameMessageLabel.setText(" ");
         passwordMessageLabel.setText(" ");
         if (session.isRegistered(usernameField.getText())) {
             if (session.login(usernameField.getText(), passwordField.getPassword())) {
-                JDialog dialog = new JDialog(this, usernameField.getText() + " is now logged in...", true);
-                dialog.setVisible(true);
+                userLoggedIn(new UserLoginEvent(session.getLoggedUser()));
             } else {
                 passwordMessageLabel.setText("Invalid password.");
+                logger.debug("Login failure: invalid password (for the " + usernameField.getText() + " username).");
             }
         } else {
             usernameMessageLabel.setText("Invalid username.");
+            logger.debug("Login failure: invalid username (for the " + usernameField.getText() + " username).");
         }
     }//GEN-LAST:event_okButtonActionPerformed
-
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        //System.exit(EXIT_ON_CLOSE);
-    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("GTK+".equals(info.getName())) {
@@ -249,35 +316,27 @@ public class LoginDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(LoginDialog.class.getName()).fatal(ex);
-        }
-        //</editor-fold>
-        
-        //</editor-fold>
-        
-        Session session = new Session();
-
-        /* Create and display the dialog */
+            logger.fatal(ex);
+        }        
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true, session);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                try {
+                    LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true);
+                    dialog.setVisible(true);
+                } catch (org.hibernate.exception.JDBCConnectionException e) {
+                    JOptionPane.showMessageDialog(null, "You must initialize the database server firstly in order to use the iDentistry application properly.", "Database serve unintialiazed ...", JOptionPane.ERROR_MESSAGE);
+                    logger.fatal("The database server is not initialized.");
+                }
             }
         });
-        
-        session.close();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonsPanel;
     private javax.swing.JSeparator buttonsSeparator;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel logoLabel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton okButton;
     private javax.swing.JPasswordField passwordField;

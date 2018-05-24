@@ -8,6 +8,7 @@ package tech.adrianohrl.identistry;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
+import org.apache.log4j.Logger;
 import tech.adrianohrl.dao.DataSource;
 import tech.adrianohrl.identistry.control.dao.individuals.LoggableDAO;
 import tech.adrianohrl.identistry.model.individuals.Loggable;
@@ -24,6 +25,7 @@ public class Session {
     private Calendar start = null;
     private double duration = 0.0;
     private Calendar deadline = null;
+    private static final Logger logger = Logger.getLogger(Session.class);
     
     public boolean isRegistered(String username) {
         return userDAO.isRegistered(username);
@@ -38,14 +40,21 @@ public class Session {
         duration = user.getConfiguration().getSessionDuration();
         start = new GregorianCalendar();
         setDeadline();
+        logger.info(username + " is logged in the iDentistry application.");
         return true;
     }
     
     public boolean logout() {
+        String username = loggedUser != null ? loggedUser.getUsername() : "";
         loggedUser = null;
         start = null;
         duration = 0.0;
         deadline = null;
+        if (username.isEmpty()) {
+            logger.warn("Unnecessary logout.");
+            return false;
+        }
+        logger.info(username + " is logged out the iDentistry application.");
         return true;
     }
     
@@ -59,6 +68,7 @@ public class Session {
     
     public boolean updateDeadline() {
         if (expired()) {
+            logger.error(loggedUser.getUsername() + "'s session became expired.");
             return false;
         }
         setDeadline();
@@ -75,10 +85,16 @@ public class Session {
         deadline.add(Calendar.SECOND, second);
         int millisecond = (int) (1000 * (duration - Math.floor(duration)));
         deadline.add(Calendar.MILLISECOND, millisecond);
+        logger.trace("Updated " + loggedUser.getUsername() + "'s session duration to " + deadline.toString());
     }
     
     public void close() {
         em.close();
+        DataSource.closeEntityManagerFactory();
+    }
+
+    public Loggable getLoggedUser() {
+        return loggedUser;
     }
     
 }

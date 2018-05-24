@@ -5,18 +5,22 @@
  */
 package tech.adrianohrl.identistry.view;
 
+import java.util.EventListener;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
-import tech.adrianohrl.identistry.Session;
+import org.hibernate.exception.JDBCConnectionException;
+import tech.adrianohrl.identistry.model.individuals.Loggable;
 import tech.adrianohrl.identistry.view.dialogs.LoginDialog;
+import tech.adrianohrl.identistry.view.events.UserLoginEvent;
+import tech.adrianohrl.identistry.view.events.UserLoginEventListener;
 
 /**
  *
  * @author adrianohrl
  */
-public class iDentistry extends javax.swing.JFrame {
+public class iDentistry extends javax.swing.JFrame implements EventListener {
     
-    private Session session;
-    private LoginDialog loginDialog;
+    private LoginDialog loginDialog = null;
     private final static Logger logger = Logger.getLogger(iDentistry.class);
 
     /**
@@ -27,15 +31,39 @@ public class iDentistry extends javax.swing.JFrame {
         initMyComponents();
     }
     
+    /**
+     * Creates new form iDentistry
+     */
     private void initMyComponents() {
-        session = new Session();
-        loginDialog = new LoginDialog(this, true, session);
-        loginDialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
-            }
-        });
+        try {
+            loginDialog = new LoginDialog(this, true);
+            loginDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            loginDialog.addUserLoginEventListener(new UserLoginEventListener() {
+                @Override
+                public void userLoggedIn(UserLoginEvent evt) {
+                    iDentistry.this.setVisible(true);
+                    iDentistry.this.loginDialog.setVisible(false);
+                    Loggable user = (Loggable) evt.getSource();
+                    logger.info("The " + user.getUsername() + " username is logged in the iDentistry ...");
+                }
+
+                @Override
+                public void userLoggedOut(UserLoginEvent event) {
+                    iDentistry.this.setVisible(false);
+                    iDentistry.this.loginDialog.setVisible(true);
+                }
+            });
+            loginDialog.setVisible(true);
+            logger.info("Starting iDentistry ...");
+        } catch (JDBCConnectionException e) {
+            JOptionPane.showMessageDialog(this, "You must initialize the database server firstly in order to use the iDentistry application properly.", "Database serve unintialiazed ...", JOptionPane.ERROR_MESSAGE);
+            logger.fatal("The database server is not initialized.");            
+        }
     }
 
     /**
@@ -56,14 +84,6 @@ public class iDentistry extends javax.swing.JFrame {
         editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
-            }
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
-        });
 
         fileMenu.setText("File");
 
@@ -131,27 +151,10 @@ public class iDentistry extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_dentistMenuItemActionPerformed
 
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        if (!session.isLogged()) {
-            this.setVisible(false);
-            loginDialog.setVisible(true);
-        }
-    }//GEN-LAST:event_formWindowActivated
-
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        session.close();
-        logger.info("Closing iDentistry.");
-    }//GEN-LAST:event_formWindowClosed
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void main(String args[]) {        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("GTK+".equals(info.getName())) {
@@ -160,16 +163,12 @@ public class iDentistry extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(iDentistry.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            logger.error(ex);
         }
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new iDentistry().setVisible(true);
+                new iDentistry().setVisible(false);
             }
         });
     }

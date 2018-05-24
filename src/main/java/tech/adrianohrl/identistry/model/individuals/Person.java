@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
  * @author adrianohrl
  */
 @Entity
-public  class Person implements Comparable<Person>, Serializable {
+public class Person implements Comparable<Person>, Serializable {
     
     @Id
     private String name;

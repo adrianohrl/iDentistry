@@ -12,21 +12,25 @@
             <param name="ConversionPattern" value="[%p] %d{yyyy-MM-dd HH:mm:ss} %c{1}:%L - %m%n" />
         </layout>
     </appender>
-    <root>
-        <level value="TRACE" />
-        <appender-ref ref="file" />
-    </root>
+    <category name="org.hibernate">
+        <priority value="ERROR" />
+        <appender-ref ref="console" />
+    </category>
     <category name="tech.adrianohrl.identistry.exceptions">
         <priority value="ERROR" />
         <appender-ref ref="console" /> 
     </category>
     <category name="tech.adrianohrl.identistry.control.dao">
-        <priority value="ERROR" />
+        <priority value="INFO" />
         <appender-ref ref="console" /> 
     </category>
-    <category name="org.hibernate.SQL">
-        <priority value="INFO" />
-        <appender-ref ref="console" />
-        <appender-ref ref="file" /> 
+    <category name="tech.adrianohrl">
+        <priority value="DEBUG" />
+        <appender-ref ref="console" /> 
     </category>
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
 </log4j:configuration>
