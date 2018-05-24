@@ -9,15 +9,34 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Observation implements Iterable<Tag>, Serializable {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long code;
     private String obs;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "Observation_Tag", 
+        joinColumns = @JoinColumn(name = "observation_code"),
+        inverseJoinColumns = @JoinColumn(name = "tag_name"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"observation_code", "tag_name"})
+    )
     private List<Tag> tags = new ArrayList<>();    
 
     public Observation() {

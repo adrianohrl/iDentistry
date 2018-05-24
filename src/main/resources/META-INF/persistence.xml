@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="iDentistryPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>tech.adrianohrl.identistry.model.dentitions.Dentition</class>
+    <class>tech.adrianohrl.identistry.model.dentitions.Tooth</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Address</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Anamnesis</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Assistant</class>
+    <class>tech.adrianohrl.identistry.model.individuals.CRO</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Channel</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Configuration</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Dentist</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Indication</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Loggable</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Observation</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Patient</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Person</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Specialty</class>
+    <class>tech.adrianohrl.identistry.model.individuals.Tag</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/iDentistry?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="iDentistry"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="iDentistry"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+    </properties>
+  </persistence-unit>
+</persistence>

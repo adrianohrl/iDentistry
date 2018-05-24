@@ -8,16 +8,28 @@ package tech.adrianohrl.identistry.model.individuals;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author adrianohrl
  */
-public class Person implements Comparable<Person>, Serializable {
+@Entity
+public  class Person implements Comparable<Person>, Serializable {
     
+    @Id
     private String name;
     private String phone;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
     private Calendar dob;
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Address address;
     private String rg;
     private String cpf;

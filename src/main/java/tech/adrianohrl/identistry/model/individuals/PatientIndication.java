@@ -5,12 +5,15 @@
  */
 package tech.adrianohrl.identistry.model.individuals;
 
+import javax.persistence.ManyToOne;
+
 /**
  *
  * @author adrianohrl
  */
 public class PatientIndication extends Indication {
     
+    @ManyToOne(optional = false)
     private Patient patient;
 
     public PatientIndication() {

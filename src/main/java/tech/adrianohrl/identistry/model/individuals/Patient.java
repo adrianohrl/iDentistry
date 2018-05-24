@@ -8,16 +8,27 @@ package tech.adrianohrl.identistry.model.individuals;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Patient extends Person {
     
+    @OneToOne(cascade = CascadeType.ALL)
     private Anamnesis anamnesis = new Anamnesis();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Observation> obss = new ArrayList<>();
+    @ManyToOne
     private Person responsible;
+    @OneToOne(cascade = CascadeType.ALL)
     private Indication indication;
 
     public Patient() {

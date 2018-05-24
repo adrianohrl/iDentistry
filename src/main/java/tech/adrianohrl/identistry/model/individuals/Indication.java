@@ -6,14 +6,23 @@
 package tech.adrianohrl.identistry.model.individuals;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Indication implements Comparable<Indication>, Serializable {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long code;
+    @ManyToOne(optional = false)
     private Channel channel;
 
     public Indication() {

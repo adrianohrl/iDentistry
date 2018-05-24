@@ -8,14 +8,31 @@ package tech.adrianohrl.identistry.model.individuals;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Dentist extends Loggable {
     
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CRO> cros = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "Dentist_Specialty", 
+        joinColumns = @JoinColumn(name = "dentist_name"),
+        inverseJoinColumns = @JoinColumn(name = "specialty_name"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"dentist_name", "specialty_name"})
+    )
     private List<Specialty> specialties = new ArrayList<>();
 
     public Dentist() {
@@ -46,7 +63,7 @@ public class Dentist extends Loggable {
     
     public CRO getCro(String state) {
         for (CRO cro : cros) {
-            if (state.equalsIgnoreCase(cro.getState())) {
+            if (state.equalsIgnoreCase(cro.getUf())) {
                 return cro;
             }
         }

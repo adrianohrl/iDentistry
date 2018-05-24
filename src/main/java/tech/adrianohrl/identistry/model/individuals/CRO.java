@@ -6,33 +6,39 @@
 package tech.adrianohrl.identistry.model.individuals;
 
 import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class CRO implements Comparable<CRO>, Serializable {
     
+    @Id
     private String registration;
-    private String state;
+    @Column(nullable = false)
+    private String uf;
 
     public CRO() {
     }
 
-    public CRO(String registration, String state) {
+    public CRO(String registration, String uf) {
         this.registration = registration;
-        this.state = state;
+        this.uf = uf;
     }
 
     @Override
     public int compareTo(CRO cro) {
-        return !state.equalsIgnoreCase(cro.state) ? state.compareToIgnoreCase(cro.state) :
+        return !uf.equalsIgnoreCase(cro.uf) ? uf.compareToIgnoreCase(cro.uf) :
                 registration.compareToIgnoreCase(cro.registration);
     }
 
     @Override
     public String toString() {
-        return "CRO-" + state + " " + registration;
+        return "CRO-" + uf + " " + registration;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class CRO implements Comparable<CRO>, Serializable {
     }
     
     public boolean equals(CRO cro) {
-        return cro != null && registration.equalsIgnoreCase(cro.registration) && state.equalsIgnoreCase(cro.state);
+        return cro != null && registration.equalsIgnoreCase(cro.registration) && uf.equalsIgnoreCase(cro.uf);
     }
 
     public String getRegistration() {
@@ -52,12 +58,12 @@ public class CRO implements Comparable<CRO>, Serializable {
         this.registration = registration;
     }
 
-    public String getState() {
-        return state;
+    public String getUf() {
+        return uf;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setUf(String uf) {
+        this.uf = uf;
     }
     
 }

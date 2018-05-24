@@ -5,18 +5,30 @@
  */
 package tech.adrianohrl.identistry.model.dentitions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author adrianohrl
  */
-public class Dentition implements Iterable<Tooth> {
+@Entity
+public class Dentition implements Iterable<Tooth>, Serializable {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long code;
     private Stages stage;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tooth> teeth = new ArrayList<>();
 
     public Dentition() {

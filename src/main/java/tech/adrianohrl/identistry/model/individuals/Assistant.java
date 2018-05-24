@@ -6,11 +6,13 @@
 package tech.adrianohrl.identistry.model.individuals;
 
 import java.util.Calendar;
+import javax.persistence.Entity;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Assistant extends Loggable {
 
     public Assistant() {

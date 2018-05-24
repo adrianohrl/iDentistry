@@ -6,13 +6,20 @@
 package tech.adrianohrl.identistry.model.dentitions;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Tooth implements Comparable<Tooth>, Serializable {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long code;
     private int numbering;
     private Dentitions dentition;

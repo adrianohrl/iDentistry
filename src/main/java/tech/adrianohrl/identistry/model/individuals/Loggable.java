@@ -8,22 +8,32 @@ package tech.adrianohrl.identistry.model.individuals;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import java.util.Calendar;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public abstract class Loggable extends Person {
     
+    @Column(unique = true)
     private String username;
     private String password;
+    @Column(unique = true)
     private String email;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Configuration configuration;
 
     public Loggable() {
     }
 
     public Loggable(String name, String phone, Calendar dob, Address address, String rg, String cpf) {
         super(name, phone, dob, address, rg, cpf);
+        configuration = Configuration.getDefault();
     }
 
     public Loggable(String username, String password, String email, String name, String phone, Calendar dob, Address address, String rg, String cpf) {
@@ -31,6 +41,7 @@ public abstract class Loggable extends Person {
         this.username = username;
         this.password = password;
         this.email = email;
+        configuration = Configuration.getDefault();
     }
     
     public boolean authenticate(String username, char[] password) {
@@ -65,6 +76,14 @@ public abstract class Loggable extends Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
     
 }

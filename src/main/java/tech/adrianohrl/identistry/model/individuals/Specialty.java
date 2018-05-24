@@ -6,13 +6,17 @@
 package tech.adrianohrl.identistry.model.individuals;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  *
  * @author adrianohrl
  */
+@Entity
 public class Specialty implements Comparable<Specialty>, Serializable {
     
+    @Id
     private String name;
     private String obs;
 
