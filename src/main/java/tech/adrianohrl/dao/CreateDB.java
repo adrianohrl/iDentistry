@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
  */
 public class CreateDB {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DataSourceException {
         EntityManager em = DataSource.createEntityManager();
         em.close();
         DataSource.closeEntityManagerFactory();

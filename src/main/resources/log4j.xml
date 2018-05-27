@@ -18,19 +18,16 @@
     </category>
     <category name="tech.adrianohrl.identistry.exceptions">
         <priority value="ERROR" />
-        <appender-ref ref="console" /> 
     </category>
     <category name="tech.adrianohrl.identistry.control.dao">
         <priority value="INFO" />
-        <appender-ref ref="console" /> 
     </category>
     <category name="tech.adrianohrl">
         <priority value="DEBUG" />
-        <appender-ref ref="console" /> 
+        <appender-ref ref="file" />
     </category>
     <root>
         <level value="INFO" />
         <appender-ref ref="console" />
-        <appender-ref ref="file" />
     </root>
 </log4j:configuration>

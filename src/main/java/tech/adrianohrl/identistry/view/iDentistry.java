@@ -7,12 +7,15 @@ package tech.adrianohrl.identistry.view;
 
 import java.util.EventListener;
 import javax.swing.JOptionPane;
+import jiconfont.icons.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.JDBCConnectionException;
-import tech.adrianohrl.identistry.model.individuals.Loggable;
+import tech.adrianohrl.dao.DataSourceException;
 import tech.adrianohrl.identistry.view.dialogs.LoginDialog;
-import tech.adrianohrl.identistry.view.events.UserLoginEvent;
-import tech.adrianohrl.identistry.view.events.UserLoginEventListener;
+import tech.adrianohrl.identistry.SessionEvent;
+import tech.adrianohrl.identistry.SessionEventListener;
+import tech.adrianohrl.identistry.exceptions.iDentistryException;
 
 /**
  *
@@ -27,6 +30,7 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
      * Creates new form iDentistry
      */
     public iDentistry() {
+        IconFontSwing.register(FontAwesome.getIconFont());
         initComponents();
         initMyComponents();
     }
@@ -43,26 +47,33 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
                     System.exit(0);
                 }
             });
-            loginDialog.addUserLoginEventListener(new UserLoginEventListener() {
+            loginDialog.addUserLoginEventListener(new SessionEventListener() {
                 @Override
-                public void userLoggedIn(UserLoginEvent evt) {
+                public void userLoggedIn(SessionEvent evt) {
                     iDentistry.this.setVisible(true);
                     iDentistry.this.loginDialog.setVisible(false);
-                    Loggable user = (Loggable) evt.getSource();
-                    logger.info("The " + user.getUsername() + " username is logged in the iDentistry ...");
+                    sessionUserNameLabel.setText(evt.getUserName());
+                    sessionCountdownTimerLabel.setText(evt.getRemainingDuration());
                 }
 
                 @Override
-                public void userLoggedOut(UserLoginEvent event) {
+                public void updateRemainingDuration(SessionEvent evt) {
+                    sessionCountdownTimerLabel.setText(evt.getRemainingDuration());
+                }
+
+                @Override
+                public void userLoggedOut(SessionEvent event) {
                     iDentistry.this.setVisible(false);
                     iDentistry.this.loginDialog.setVisible(true);
+                    sessionUserNameLabel.setText("");
+                    sessionCountdownTimerLabel.setText("-- : -- : --");
                 }
             });
             loginDialog.setVisible(true);
             logger.info("Starting iDentistry ...");
-        } catch (JDBCConnectionException e) {
-            JOptionPane.showMessageDialog(this, "You must initialize the database server firstly in order to use the iDentistry application properly.", "Database serve unintialiazed ...", JOptionPane.ERROR_MESSAGE);
-            logger.fatal("The database server is not initialized.");            
+        } catch (DataSourceException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error while initializing iDentistry ...", JOptionPane.ERROR_MESSAGE);
+            logger.fatal("The database server is not initialized.");              
         }
     }
 
@@ -75,25 +86,86 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        sessionPanel = new javax.swing.JPanel();
+        sessionUserLabel = new javax.swing.JLabel();
+        sessionUserNameLabel = new javax.swing.JLabel();
+        sessionTimerLabel = new javax.swing.JLabel();
+        sessionCountdownTimerLabel = new javax.swing.JLabel();
+        sessionLogoutButton = new javax.swing.JButton();
         mainMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         newMenu = new javax.swing.JMenu();
         pacientMenuItem = new javax.swing.JMenuItem();
         assistantMenuItem = new javax.swing.JMenuItem();
         dentistMenuItem = new javax.swing.JMenuItem();
+        lastFileSeparator = new javax.swing.JPopupMenu.Separator();
+        logoutMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("iDentistry");
+
+        sessionUserLabel.setText("User:");
+
+        sessionUserNameLabel.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        sessionUserNameLabel.setText(" ");
+
+        sessionTimerLabel.setText("Timeout:");
+
+        sessionCountdownTimerLabel.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        sessionCountdownTimerLabel.setText("-- : -- : --");
+
+        sessionLogoutButton.setIcon(IconFontSwing.buildIcon(FontAwesome.SIGN_OUT, 15));
+        sessionLogoutButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        sessionLogoutButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        sessionLogoutButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        sessionLogoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sessionLogoutButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout sessionPanelLayout = new javax.swing.GroupLayout(sessionPanel);
+        sessionPanel.setLayout(sessionPanelLayout);
+        sessionPanelLayout.setHorizontalGroup(
+            sessionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sessionPanelLayout.createSequentialGroup()
+                .addContainerGap(287, Short.MAX_VALUE)
+                .addComponent(sessionUserLabel)
+                .addGap(12, 12, 12)
+                .addComponent(sessionUserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(sessionTimerLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(sessionCountdownTimerLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sessionLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+        sessionPanelLayout.setVerticalGroup(
+            sessionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sessionPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(sessionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(sessionUserLabel)
+                    .addComponent(sessionTimerLabel)
+                    .addComponent(sessionCountdownTimerLabel)
+                    .addComponent(sessionLogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sessionUserNameLabel))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
 
         fileMenu.setText("File");
 
+        newMenu.setIcon(IconFontSwing.buildIcon(FontAwesome.USER_PLUS, 15));
         newMenu.setText("New ...");
 
         pacientMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        pacientMenuItem.setText("Pacient");
+        pacientMenuItem.setText("Patient");
         pacientMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pacientMenuItemActionPerformed(evt);
+                patientMenuItemActionPerformed(evt);
             }
         });
         newMenu.add(pacientMenuItem);
@@ -117,6 +189,26 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         newMenu.add(dentistMenuItem);
 
         fileMenu.add(newMenu);
+        fileMenu.add(lastFileSeparator);
+
+        logoutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        logoutMenuItem.setIcon(IconFontSwing.buildIcon(FontAwesome.SIGN_OUT, 15));
+        logoutMenuItem.setText("Logout");
+        logoutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(logoutMenuItem);
+
+        exitMenuItem.setIcon(IconFontSwing.buildIcon(FontAwesome.POWER_OFF, 15));
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(exitMenuItem);
 
         mainMenuBar.add(fileMenu);
 
@@ -129,19 +221,25 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 779, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(sessionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 518, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(454, Short.MAX_VALUE)
+                .addComponent(sessionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void pacientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pacientMenuItemActionPerformed
+    private void patientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientMenuItemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_pacientMenuItemActionPerformed
+    }//GEN-LAST:event_patientMenuItemActionPerformed
 
     private void assistantMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assistantMenuItemActionPerformed
         // TODO add your handling code here:
@@ -150,6 +248,18 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     private void dentistMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dentistMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dentistMenuItemActionPerformed
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void logoutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutMenuItemActionPerformed
+        loginDialog.logout();
+    }//GEN-LAST:event_logoutMenuItemActionPerformed
+
+    private void sessionLogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sessionLogoutButtonActionPerformed
+        loginDialog.logout();
+    }//GEN-LAST:event_sessionLogoutButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,7 +278,7 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new iDentistry().setVisible(false);
+                new iDentistry().setVisible(true);
             }
         });
     }
@@ -177,9 +287,18 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     private javax.swing.JMenuItem assistantMenuItem;
     private javax.swing.JMenuItem dentistMenuItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JPopupMenu.Separator lastFileSeparator;
+    private javax.swing.JMenuItem logoutMenuItem;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JMenu newMenu;
     private javax.swing.JMenuItem pacientMenuItem;
+    private javax.swing.JLabel sessionCountdownTimerLabel;
+    private javax.swing.JButton sessionLogoutButton;
+    private javax.swing.JPanel sessionPanel;
+    private javax.swing.JLabel sessionTimerLabel;
+    private javax.swing.JLabel sessionUserLabel;
+    private javax.swing.JLabel sessionUserNameLabel;
     // End of variables declaration//GEN-END:variables
 }

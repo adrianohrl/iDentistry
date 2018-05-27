@@ -30,3 +30,4 @@ target/
 # Auxiliar #
 others/cp
 others/tests
+/src/test/java/General.java
