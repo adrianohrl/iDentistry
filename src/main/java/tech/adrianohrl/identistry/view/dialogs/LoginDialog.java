@@ -7,7 +7,9 @@ package tech.adrianohrl.identistry.view.dialogs;
  */
 
 import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
@@ -32,7 +34,7 @@ public class LoginDialog extends javax.swing.JDialog {
     public LoginDialog(java.awt.Frame parent, boolean modal) throws DataSourceException {
         super(parent, modal);
         this.session = new Session();
-        initComponents();
+        initComponents();    
     }
     
     public void addUserLoginEventListener(SessionEventListener listener) {
@@ -41,6 +43,10 @@ public class LoginDialog extends javax.swing.JDialog {
     
     public void removeMyEventListener(SessionEventListener listener) {
         session.removeSessionListener(listener);
+    }
+    
+    public void updateSessionDeadline() {
+        session.updateDeadline();
     }
     
     public void logout() {
@@ -57,7 +63,6 @@ public class LoginDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        IconFontSwing.register(FontAwesome.getIconFont());
         mainPanel = new javax.swing.JPanel();
         buttonsPanel = new javax.swing.JPanel();
         okButton = new javax.swing.JButton();
@@ -90,9 +95,10 @@ public class LoginDialog extends javax.swing.JDialog {
         mainPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         mainPanel.setName(""); // NOI18N
         mainPanel.setNextFocusableComponent(usernameField);
+        getRootPane().setDefaultButton(okButton);
+        getRootPane().registerKeyboardAction(e -> System.exit(0), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         okButton.setIcon(IconFontSwing.buildIcon(FontAwesome.SIGN_IN, 16));
-        okButton.setMnemonic(KeyEvent.VK_ENTER);
         okButton.setText("Ok");
         okButton.setToolTipText("Click for validating the input username and password to log into the iDentistry application.");
         okButton.setMaximumSize(new java.awt.Dimension(100, 30));
@@ -335,4 +341,5 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JLabel usernameMessageLabel;
     private javax.swing.JPanel usernamePanel;
     // End of variables declaration//GEN-END:variables
+    
 }

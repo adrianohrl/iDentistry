@@ -25,14 +25,24 @@ public class Person implements Comparable<Person>, Serializable {
     
     @Id
     private String name;
+    private Genders gender;
     private String phone;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     private Calendar dob;
     @OneToOne(cascade = CascadeType.REMOVE)
     private Address address;
+    @Column(unique = true)
     private String rg;
+    @Column(unique = true)
     private String cpf;
+    @Column(unique = true)
+    private String email;
+    private boolean whatsapp;
+    @Column(unique = true)
+    private String facebook;
+    @Column(unique = true)
+    private String instagram;
 
     public Person() {
     }
@@ -56,6 +66,30 @@ public class Person implements Comparable<Person>, Serializable {
         this.address = address;
         this.rg = rg;
         this.cpf = cpf;
+    }
+
+    public Person(String name, String phone, Calendar dob, Address address, String rg, String cpf, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.dob = dob;
+        this.address = address;
+        this.rg = rg;
+        this.cpf = cpf;
+        this.email = email;
+    }
+
+    public Person(String name, Genders gender, String phone, Calendar dob, Address address, String rg, String cpf, String email, boolean whatsapp, String facebook, String instagram) {
+        this.name = name;
+        this.gender = gender;
+        this.phone = phone;
+        this.dob = dob;
+        this.address = address;
+        this.rg = rg;
+        this.cpf = cpf;
+        this.email = email;
+        this.whatsapp = whatsapp;
+        this.facebook = facebook;
+        this.instagram = instagram;
     }
     
     public int getAge() {
@@ -92,6 +126,14 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Genders getGender() {
+        return gender;
+    }
+
+    public void setGender(Genders gender) {
+        this.gender = gender;
     }
 
     public String getPhone() {
@@ -132,6 +174,38 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(boolean whatsapp) {
+        this.whatsapp = whatsapp;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
     }
     
 }

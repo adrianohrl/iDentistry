@@ -57,6 +57,15 @@ public class Session implements ActionListener {
         return true;
     }
     
+    public boolean updateDeadline() {
+        if (isExpired()) {
+            logger.error(loggedUser.getUsername() + "'s session became expired.");
+            return false;
+        }
+        setDeadline();
+        return true;
+    }
+    
     public boolean logout() {
         if (timer != null) {
             timer.stop();
@@ -83,15 +92,6 @@ public class Session implements ActionListener {
     public boolean isExpired() {
         return duration >= 0.0 && deadline != null && deadline.before(new GregorianCalendar());
     }
-    
-    /*public boolean updateDeadline() {
-        if (isExpired()) {
-            logger.error(loggedUser.getUsername() + "'s session became expired.");
-            return false;
-        }
-        setDeadline();
-        return true;
-    }*/
     
     public String getRemainingSessionDuration() {
         if (duration <= 0.0 || deadline == null) {
@@ -176,7 +176,6 @@ public class Session implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        System.out.println("actionPerformed");
         if (isExpired()) {
             logger.error("The " + loggedUser.getUsername() + "'s session became expired.");
             logout();

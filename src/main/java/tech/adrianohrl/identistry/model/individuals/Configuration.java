@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import javax.swing.UIManager;
 import org.apache.log4j.Logger;
 import org.ho.yaml.Yaml;
-import tech.adrianohrl.util.FileHelper;
+import tech.adrianohrl.util.PropertyUtil;
 
 /**
  *
@@ -37,7 +37,7 @@ public class Configuration implements Serializable {
     public static Configuration getDefault() {
         String filename = "default-user-config.yaml";
         Configuration configuration = null;
-        String path = FileHelper.getResourceConfigFolderPath();
+        String path = PropertyUtil.getResourceConfigFolderPath();
         try {
             File file = new File(path + "/" + filename);
             configuration = Yaml.loadType(file, Configuration.class);
@@ -48,13 +48,13 @@ public class Configuration implements Serializable {
     }
     
     public void save(String filename) throws FileNotFoundException {
-        String path = FileHelper.getPathToSave();
+        String path = PropertyUtil.getPathToSave();
         File file = new File(path + "/" + filename);
         Yaml.dump(this, file, true);
     }
     
     public static Configuration load(String filename) throws FileNotFoundException {
-        String path = FileHelper.getPathToSave();
+        String path = PropertyUtil.getPathToSave();
         File file = new File(path + "/" + filename);
         return Yaml.loadType(file, Configuration.class);
     }

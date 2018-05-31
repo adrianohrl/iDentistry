@@ -23,8 +23,6 @@ public abstract class Loggable extends Person {
     @Column(unique = true)
     private String username;
     private String password;
-    @Column(unique = true)
-    private String email;
     @OneToOne(cascade = CascadeType.ALL)
     private Configuration configuration;
 
@@ -37,10 +35,9 @@ public abstract class Loggable extends Person {
     }
 
     public Loggable(String username, String password, String email, String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(name, phone, dob, address, rg, cpf);
+        super(name, phone, dob, address, rg, cpf, email);
         this.username = username;
         this.password = password;
-        this.email = email;
         configuration = Configuration.getDefault();
     }
     
@@ -68,14 +65,6 @@ public abstract class Loggable extends Person {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Configuration getConfiguration() {

@@ -46,7 +46,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="IconFontSwing.register(FontAwesome.getIconFont());"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="getRootPane().setDefaultButton(okButton);&#xa;getRootPane().registerKeyboardAction(e -&gt; System.exit(0), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -133,9 +133,6 @@
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="IconFontSwing.buildIcon(FontAwesome.SIGN_IN, 16)" type="code"/>
-                </Property>
-                <Property name="mnemonic" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyEvent.VK_ENTER" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ok"/>
                 <Property name="toolTipText" type="java.lang.String" value="Click for validating the input username and password to log into the iDentistry application."/>
