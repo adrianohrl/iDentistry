@@ -34,7 +34,7 @@
                   <Component id="addressPanel" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="personPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" pref="72" max="32767" attributes="0"/>
                       <Component id="picturePanel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="socialNetworksPanel" max="32767" attributes="0"/>
@@ -55,7 +55,7 @@
               <Component id="addressPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="socialNetworksPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -163,7 +163,7 @@
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Enter the name."/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="pictureLabel"/>
+              <ComponentRef name="genderFemaleRadioButton"/>
             </Property>
           </Properties>
         </Component>
@@ -542,7 +542,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Enter the city name."/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="nameTextField"/>
+              <ComponentRef name="facebookTextField"/>
             </Property>
           </Properties>
         </Component>
@@ -606,20 +606,33 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="occupationLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="intagramLabelIcon" min="-2" pref="17" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="instagramLabel1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="facebookLabelIcon" min="-2" pref="17" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="facebookLabel1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="facebookLabelIcon" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
-                      <Component id="intagramLabelIcon" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="facebookLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="instagramLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="facebookTextField" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
-                      <Component id="instagramTextField" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Component id="occupationTextField" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="facebookLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                          <Component id="facebookTextField" min="-2" pref="150" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="instagramLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                          <Component id="instagramTextField" min="-2" pref="150" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -631,14 +644,21 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
                       <Component id="facebookLabelIcon" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="facebookLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="facebookLabel" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="facebookTextField" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
                       <Component id="intagramLabelIcon" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="instagramLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="instagramLabel" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="instagramTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="occupationLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="occupationTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -646,11 +666,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="facebookLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value=":   https://facebook.com/"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="facebookLabelIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -670,7 +685,27 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="facebookLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="https://facebook.com/"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="instagramLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="https://instagram.com/"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="facebookLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value=":"/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JTextField" name="facebookTextField">
+          <Properties>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="instagramTextField"/>
+            </Property>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="intagramLabelIcon">
           <Properties>
@@ -691,11 +726,28 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="instagramTextField">
-        </Component>
-        <Component class="javax.swing.JLabel" name="instagramLabel">
+        <Component class="javax.swing.JLabel" name="instagramLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value=": https://instagram.com/"/>
+            <Property name="text" type="java.lang.String" value=":"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="instagramTextField">
+          <Properties>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="occupationTextField"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="occupationLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Occupation:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="occupationTextField">
+          <Properties>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="pictureLabel"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

@@ -29,13 +29,13 @@ public abstract class Loggable extends Person {
     public Loggable() {
     }
 
-    public Loggable(String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(name, phone, dob, address, rg, cpf);
+    public Loggable(String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, String occupation) {
+        super(name, picture, phone, dob, address, rg, cpf, occupation);
         configuration = Configuration.getDefault();
     }
 
-    public Loggable(String username, String password, String email, String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(name, phone, dob, address, rg, cpf, email);
+    public Loggable(String username, String password, String email, String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, String occupation) {
+        super(name, picture, phone, dob, address, rg, cpf, email, occupation);
         this.username = username;
         this.password = password;
         configuration = Configuration.getDefault();

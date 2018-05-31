@@ -12,17 +12,17 @@ import org.apache.log4j.Logger;
  *
  * @author adrianohrl
  */
-public class AssistantPanel extends javax.swing.JPanel implements WizardPagePanel {
+public class PatientPanel extends javax.swing.JPanel implements WizardPagePanel {
     
-    private static final Logger logger = Logger.getLogger(AssistantPanel.class);
+    private static final Logger logger = Logger.getLogger(PatientPanel.class);
 
     /**
-     * Creates new form AssistantPanel
+     * Creates new form PatientPanel
      */
-    public AssistantPanel() {
+    public PatientPanel() {
         initComponents();
     }
-    
+
     @Override
     public boolean isFilled() {
         return false;

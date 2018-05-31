@@ -25,6 +25,7 @@ public class Person implements Comparable<Person>, Serializable {
     
     @Id
     private String name;
+    private String picture;
     private Genders gender;
     private String phone;
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,6 +44,7 @@ public class Person implements Comparable<Person>, Serializable {
     private String facebook;
     @Column(unique = true)
     private String instagram;
+    private String occupation;
 
     public Person() {
     }
@@ -52,34 +54,40 @@ public class Person implements Comparable<Person>, Serializable {
         this.phone = phone;
     }
 
-    public Person(String name, String phone, Calendar dob, Address address) {
+    public Person(String name, String picture, String phone, Calendar dob, Address address) {
         this.name = name;
+        this.picture = picture;
         this.phone = phone;
         this.dob = dob;
         this.address = address;
     }
 
-    public Person(String name, String phone, Calendar dob, Address address, String rg, String cpf) {
+    public Person(String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, String occupation) {
         this.name = name;
+        this.picture = picture;
         this.phone = phone;
         this.dob = dob;
         this.address = address;
         this.rg = rg;
         this.cpf = cpf;
+        this.occupation = occupation;
     }
 
-    public Person(String name, String phone, Calendar dob, Address address, String rg, String cpf, String email) {
+    public Person(String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, String email, String occupation) {
         this.name = name;
+        this.picture = picture;
         this.phone = phone;
         this.dob = dob;
         this.address = address;
         this.rg = rg;
         this.cpf = cpf;
         this.email = email;
+        this.occupation = occupation;
     }
 
-    public Person(String name, Genders gender, String phone, Calendar dob, Address address, String rg, String cpf, String email, boolean whatsapp, String facebook, String instagram) {
+    public Person(String name, String picture, Genders gender, String phone, Calendar dob, Address address, String rg, String cpf, String email, boolean whatsapp, String facebook, String instagram, String occupation) {
         this.name = name;
+        this.picture = picture;
         this.gender = gender;
         this.phone = phone;
         this.dob = dob;
@@ -90,6 +98,7 @@ public class Person implements Comparable<Person>, Serializable {
         this.whatsapp = whatsapp;
         this.facebook = facebook;
         this.instagram = instagram;
+        this.occupation = occupation;
     }
     
     public int getAge() {
@@ -126,6 +135,14 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public Genders getGender() {
@@ -206,6 +223,14 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setInstagram(String instagram) {
         this.instagram = instagram;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
     }
     
 }

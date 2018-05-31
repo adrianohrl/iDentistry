@@ -38,16 +38,16 @@ public class Patient extends Person {
         super(name, phone);
     }
 
-    public Patient(String name, String phone, Calendar dob, Address address) {
-        super(name, phone, dob, address);
+    public Patient(String name, String picture, String phone, Calendar dob, Address address) {
+        super(name, picture, phone, dob, address);
     }
 
-    public Patient(String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(name, phone, dob, address, rg, cpf);
+    public Patient(String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, String occupation) {
+        super(name, picture, phone, dob, address, rg, cpf, occupation);
     }
 
-    public Patient(Person responsible, Indication indication, String name, String phone, Calendar dob, Address address) {
-        super(name, phone, dob, address);
+    public Patient(Person responsible, Indication indication, String name, String picture, String phone, Calendar dob, Address address) {
+        super(name, picture, phone, dob, address);
         if (isUnderage() && responsible == null) {
             throw new RuntimeException("Underage person must have a responsible person.");
         }
@@ -55,8 +55,8 @@ public class Patient extends Person {
         this.indication = indication;
     }
 
-    public Patient(Person responsible, Indication indication, String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(name, phone, dob, address, rg, cpf);
+    public Patient(Person responsible, Indication indication, String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, String occupation) {
+        super(name, picture, phone, dob, address, rg, cpf, occupation);
         if (isUnderage() && responsible == null) {
             throw new RuntimeException("Underage person must have a responsible person.");
         }

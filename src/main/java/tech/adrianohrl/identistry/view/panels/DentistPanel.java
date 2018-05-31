@@ -5,6 +5,7 @@
  */
 package tech.adrianohrl.identistry.view.panels;
 
+import java.awt.Component;
 import org.apache.log4j.Logger;
 
 /**
@@ -25,6 +26,16 @@ public class DentistPanel extends javax.swing.JPanel implements WizardPagePanel 
     @Override
     public boolean isFilled() {
         return false;
+    }
+
+    @Override
+    public Component getFirstFocusableComponent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLastFocusableComponent(Component component) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

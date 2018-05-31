@@ -5,6 +5,7 @@
  */
 package tech.adrianohrl.identistry.view.panels;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +17,7 @@ import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import tech.adrianohrl.identistry.model.individuals.Address;
+import tech.adrianohrl.identistry.model.individuals.AddressUtil;
 import tech.adrianohrl.identistry.model.individuals.Genders;
 import tech.adrianohrl.identistry.view.components.ImageUtil;
 
@@ -38,12 +40,19 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         return nameTextField.getText();
     }
     
+    public ImageIcon getPersonProfilePicture() {
+        return (ImageIcon) pictureLabel.getIcon();
+    }
+    
     public Genders getPersonGender() {
         ButtonModel radioButton = genderButtonGroup.getSelection();
         return radioButton != null ? Genders.getInstance(radioButton.getActionCommand()) : null;
     }
     
     public Calendar getPersonDayOfBirth() {
+        if (dobFormattedTextField.getText().isEmpty()) {
+            return null;
+        }
         Calendar dob = Calendar.getInstance();
         dob.setTime((Date) dobFormattedTextField.getValue());
         return dob;
@@ -76,33 +85,68 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         return new Address(street, number, area, obs, zip, city, state, "Brasil");
     }
     
-    public ImageIcon getPersonProfilePicture() {
-        return (ImageIcon) pictureLabel.getIcon();
-    }
-    
     public String getPersonFacebook() {
-        return "https://facebook.com/" + facebookTextField.getText();
+        return facebookLabel.getText() + facebookTextField.getText();
     }
     
     public String getPersonInstagram() {
-        return "https://instagram.com/" + instagramTextField.getText();
+        return instagramLabel.getText() + instagramTextField.getText();
+    }
+    
+    public String getPersonOccupation() {
+        return occupationTextField.getText();
+    }
+    
+    private boolean isAddressFilled() {
+        Address address = getPersonAddress();
+        return !address.getStreet().isEmpty()
+            && address.getNumber() > 0
+            && !address.getArea().isEmpty()
+            && !address.getCity().isEmpty()
+            && !address.getUf().isEmpty()
+            && !address.getCountry().isEmpty();
     }
             
     @Override
     public boolean isFilled() {
-        return !nameTextField.getText().isEmpty() 
-                && genderButtonGroup.getSelection() != null
-                && !dobFormattedTextField.getText().isEmpty()
-                && !phoneFormattedTextField.getText().isEmpty()
-                // && !cpfFormattedTextField.getText().isEmpty()
-                && !rgTextField.getText().isEmpty()
-                && !streetTextField.getText().isEmpty()
-                && !numberFormattedTextField.getText().isEmpty()
-                && !areaTextField.getText().isEmpty()
-                // && !zipFormattedTextField.getText().isEmpty()
-                && stateComboBox.getSelectedItem() != null
-                && cityComboBox.getSelectedItem() != null
-                && pictureLabel.getIcon() != null;
+        return !getPersonName().isEmpty() 
+            && getPersonGender() != null
+            && getPersonDayOfBirth() != null
+            && !getPersonPhone().isEmpty()
+            //&& !getPersonCPF().isEmpty()
+            && !getPersonRG().isEmpty()
+            && isAddressFilled()
+            && getPersonProfilePicture() != null;
+    }
+
+    @Override
+    public Component getFirstFocusableComponent() {
+        return nameTextField;
+    }
+
+    @Override
+    public void setLastFocusableComponent(Component component) {
+        pictureLabel.setNextFocusableComponent(component);
+    }
+    
+    private ComboBoxModel getStates() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        model.addElement("");
+        for (String state : AddressUtil.getStates()) {
+            model.addElement(state);
+        }
+        model.setSelectedItem("");
+        return model;
+    }
+    
+    private ComboBoxModel getCities(String state) {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        model.addElement("");
+        for (String city : AddressUtil.getStateCities(state)) {
+            model.addElement(city);
+        }
+        model.setSelectedItem("");
+        return model;
     }
 
     /**
@@ -151,12 +195,16 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         picturePanel = new javax.swing.JPanel();
         pictureLabel = new javax.swing.JLabel();
         socialNetworksPanel = new javax.swing.JPanel();
-        facebookLabel = new javax.swing.JLabel();
         facebookLabelIcon = new javax.swing.JLabel();
+        facebookLabel = new javax.swing.JLabel();
+        instagramLabel = new javax.swing.JLabel();
+        facebookLabel1 = new javax.swing.JLabel();
         facebookTextField = new javax.swing.JTextField();
         intagramLabelIcon = new javax.swing.JLabel();
+        instagramLabel1 = new javax.swing.JLabel();
         instagramTextField = new javax.swing.JTextField();
-        instagramLabel = new javax.swing.JLabel();
+        occupationLabel = new javax.swing.JLabel();
+        occupationTextField = new javax.swing.JTextField();
 
         genderButtonGroup.add(genderFemaleRadioButton);
         genderButtonGroup.add(genderMaleRadioButton);
@@ -170,7 +218,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         nameLabel.setFocusable(false);
 
         nameTextField.setToolTipText("Enter the name.");
-        nameTextField.setNextFocusableComponent(pictureLabel);
+        nameTextField.setNextFocusableComponent(genderFemaleRadioButton);
 
         genderLabel.setLabelFor(genderPanel);
         genderLabel.setText("Gender *:");
@@ -380,7 +428,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
 
         cityComboBox.setToolTipText("Enter the city name.");
         cityComboBox.setEnabled(false);
-        cityComboBox.setNextFocusableComponent(nameTextField);
+        cityComboBox.setNextFocusableComponent(facebookTextField);
 
         javax.swing.GroupLayout addressPanelLayout = new javax.swing.GroupLayout(addressPanel);
         addressPanel.setLayout(addressPanelLayout);
@@ -475,13 +523,19 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
 
         socialNetworksPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Social Networks"));
 
-        facebookLabel.setText(":   https://facebook.com/");
-
         facebookLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.FACEBOOK_OFFICIAL, 20));
         facebookLabelIcon.setLabelFor(facebookTextField);
         facebookLabelIcon.setMaximumSize(new java.awt.Dimension(21, 21));
         facebookLabelIcon.setMinimumSize(new java.awt.Dimension(21, 21));
         facebookLabelIcon.setPreferredSize(new java.awt.Dimension(21, 21));
+
+        facebookLabel.setText("https://facebook.com/");
+
+        instagramLabel.setText("https://instagram.com/");
+
+        facebookLabel1.setText(":");
+
+        facebookTextField.setNextFocusableComponent(instagramTextField);
 
         intagramLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.INSTAGRAM, 20));
         intagramLabelIcon.setLabelFor(instagramTextField);
@@ -489,25 +543,41 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         intagramLabelIcon.setMinimumSize(new java.awt.Dimension(21, 21));
         intagramLabelIcon.setPreferredSize(new java.awt.Dimension(21, 21));
 
-        instagramLabel.setText(": https://instagram.com/");
+        instagramLabel1.setText(":");
+
+        instagramTextField.setNextFocusableComponent(occupationTextField);
+
+        occupationLabel.setText("Occupation:");
+
+        occupationTextField.setNextFocusableComponent(pictureLabel);
 
         javax.swing.GroupLayout socialNetworksPanelLayout = new javax.swing.GroupLayout(socialNetworksPanel);
         socialNetworksPanel.setLayout(socialNetworksPanelLayout);
         socialNetworksPanelLayout.setHorizontalGroup(
             socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(socialNetworksPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(29, 29, 29)
                 .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(facebookLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(intagramLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(occupationLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, socialNetworksPanelLayout.createSequentialGroup()
+                        .addComponent(intagramLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(instagramLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, socialNetworksPanelLayout.createSequentialGroup()
+                        .addComponent(facebookLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(facebookLabel1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(facebookLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(instagramLabel, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(0, 0, 0)
-                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(facebookTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(instagramTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(occupationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(socialNetworksPanelLayout.createSequentialGroup()
+                        .addComponent(facebookLabel)
+                        .addGap(0, 0, 0)
+                        .addComponent(facebookTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(socialNetworksPanelLayout.createSequentialGroup()
+                        .addComponent(instagramLabel)
+                        .addGap(0, 0, 0)
+                        .addComponent(instagramTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         socialNetworksPanelLayout.setVerticalGroup(
@@ -516,13 +586,19 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                 .addContainerGap()
                 .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(facebookLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(facebookLabel1)
                     .addComponent(facebookLabel)
                     .addComponent(facebookTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(intagramLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(instagramLabel1)
                     .addComponent(instagramLabel)
                     .addComponent(instagramTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(occupationLabel)
+                    .addComponent(occupationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -536,7 +612,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                     .addComponent(addressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(personPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 72, Short.MAX_VALUE)
                         .addComponent(picturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(socialNetworksPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -552,7 +628,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                 .addComponent(addressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(socialNetworksPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {personPanel, picturePanel});
@@ -577,7 +653,17 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     }//GEN-LAST:event_pictureLabelKeyPressed
 
     private void stateComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stateComboBoxActionPerformed
-        System.out.println("State selected: " + stateComboBox.getSelectedItem());
+        String state = (String) stateComboBox.getSelectedItem();
+        if (!AddressUtil.isValid(state)) {
+            stateComboBox.setSelectedItem("");
+            cityComboBox.setSelectedItem("");
+            cityComboBox.setEnabled(false);
+            return;
+        }
+        System.out.println("State selected: " + state);
+        cityComboBox.setModel(getCities(state));
+        cityComboBox.setSelectedItem("");
+        cityComboBox.setEnabled(true);
     }//GEN-LAST:event_stateComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -591,6 +677,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JFormattedTextField dobFormattedTextField;
     private javax.swing.JLabel dobLabel;
     private javax.swing.JLabel facebookLabel;
+    private javax.swing.JLabel facebookLabel1;
     private javax.swing.JLabel facebookLabelIcon;
     private javax.swing.JTextField facebookTextField;
     private javax.swing.ButtonGroup genderButtonGroup;
@@ -599,6 +686,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JRadioButton genderMaleRadioButton;
     private javax.swing.JPanel genderPanel;
     private javax.swing.JLabel instagramLabel;
+    private javax.swing.JLabel instagramLabel1;
     private javax.swing.JTextField instagramTextField;
     private javax.swing.JLabel intagramLabelIcon;
     private javax.swing.JLabel nameLabel;
@@ -607,6 +695,8 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JLabel numberLabel;
     private javax.swing.JLabel obsLabel;
     private javax.swing.JTextField obsTextField;
+    private javax.swing.JLabel occupationLabel;
+    private javax.swing.JTextField occupationTextField;
     private javax.swing.JPanel personPanel;
     private javax.swing.JFormattedTextField phoneFormattedTextField;
     private javax.swing.JLabel phoneLabel;
@@ -626,13 +716,4 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JLabel zipLabel;
     // End of variables declaration//GEN-END:variables
 
-    private ComboBoxModel getStates() {
-        ComboBoxModel model = new DefaultComboBoxModel();
-        return model;
-    }
-    
-    private ComboBoxModel getCities(String state) {
-        ComboBoxModel model = new DefaultComboBoxModel();
-        return model;
-    }
 }

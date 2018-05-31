@@ -8,7 +8,6 @@ package tech.adrianohrl.identistry.view.frames;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ContainerEvent;
@@ -23,6 +22,7 @@ import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.Wizard;
 import se.gustavkarlsson.gwiz.WizardController;
+import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
 import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
 
 /**
@@ -49,12 +49,12 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         wizardPageContainer.addContainerListener(new WizardFrame.MinimumSizeAdjuster());
         
         GridBagConstraints wizardPageContainerConstraint = new GridBagConstraints();
-		wizardPageContainerConstraint.gridwidth = 5;
-		wizardPageContainerConstraint.fill = GridBagConstraints.BOTH;
-		wizardPageContainerConstraint.gridx = 0;
-		wizardPageContainerConstraint.gridy = 0;
-		wizardPageContainerConstraint.insets = new Insets(5, 5, 5, 5);
-		getContentPane().add(wizardPageContainer, wizardPageContainerConstraint);
+        wizardPageContainerConstraint.gridwidth = 5;
+        wizardPageContainerConstraint.fill = GridBagConstraints.BOTH;
+        wizardPageContainerConstraint.gridx = 0;
+        wizardPageContainerConstraint.gridy = 0;
+        wizardPageContainerConstraint.insets = new Insets(5, 5, 5, 5);
+        getContentPane().add(wizardPageContainer, wizardPageContainerConstraint);
     }
 
     /**
@@ -227,12 +227,12 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
 
         @Override
         public void componentAdded(ContainerEvent e) {
-                Dimension currentSize = getSize();
-                Dimension preferredSize = getPreferredSize();
-                Dimension newSize = new Dimension(currentSize);
-                newSize.width = Math.max(currentSize.width, preferredSize.width);
-                newSize.height = Math.max(currentSize.height, preferredSize.height);
-                setMinimumSize(newSize);
+            Dimension currentSize = getSize();
+            Dimension preferredSize = getPreferredSize();
+            Dimension newSize = new Dimension(currentSize);
+            newSize.width = Math.max(currentSize.width, preferredSize.width);
+            newSize.height = Math.max(currentSize.height, preferredSize.height);
+            setMinimumSize(newSize);
         }
 
         @Override
@@ -268,10 +268,11 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.error(ex);
         }
-        WizardFrame wizard = new WizardFrame("New Person...");
+        NewWizardTypes type = NewWizardTypes.NEW_PATIENT;
+        WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
         wizard.setVisible(true);
-        PersonWizardPage page = new PersonWizardPage();
+        PersonWizardPage page = new PersonWizardPage(type);
         controller.startWizard(page);
         /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

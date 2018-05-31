@@ -13,11 +13,11 @@ import org.apache.log4j.Logger;
  */
 public class iDentistryException extends RuntimeException {
     
-    private static final Logger log = Logger.getLogger(iDentistryException.class);
+    private static final Logger logger = Logger.getLogger(iDentistryException.class);
 
     public iDentistryException(String message) {
         super(message);
-        log.error(message);
+        logger.error(message);
     }
     
 }

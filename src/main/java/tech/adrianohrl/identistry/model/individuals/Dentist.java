@@ -38,16 +38,22 @@ public class Dentist extends Loggable {
     public Dentist() {
     }
 
-    public Dentist(String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(name, phone, dob, address, rg, cpf);
+    public Dentist(String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf) {
+        super(name, picture, phone, dob, address, rg, cpf, "Dentist");
     }
 
-    public Dentist(String username, String password, String email, String name, String phone, Calendar dob, Address address, String rg, String cpf) {
-        super(username, password, email, name, phone, dob, address, rg, cpf);
+    public Dentist(String username, String password, String email, String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf) {
+        super(username, password, email, name, picture, phone, dob, address, rg, cpf, "Dentist");
     }
 
-    public Dentist(String username, String password, String email, String name, String phone, Calendar dob, Address address, String rg, String cpf, List<CRO> cros, List<Specialty> specialties) {
-        super(username, password, email, name, phone, dob, address, rg, cpf);
+    public Dentist(String username, String password, String email, String name, String picture, String phone, Calendar dob, Address address, String rg, String cpf, List<CRO> cros, List<Specialty> specialties) {
+        super(username, password, email, name, picture, phone, dob, address, rg, cpf, "Dentist");
+        this.cros = cros;
+        this.specialties = specialties;
+    }
+
+    public Dentist(String username, String password, String email, String name, String picture, String phone, boolean whatsapp, Calendar dob, Address address, String rg, String cpf, String facebook, String instagram, List<CRO> cros, List<Specialty> specialties) {
+        super(username, password, email, name, picture, phone, dob, address, rg, cpf, "Dentist");
         this.cros = cros;
         this.specialties = specialties;
     }

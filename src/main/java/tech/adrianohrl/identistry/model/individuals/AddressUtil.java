@@ -92,5 +92,13 @@ public class AddressUtil {
             System.out.println("city of MG: " + city);
         }
     }
+
+    public static boolean isValid(String state) {
+        return states.contains(state);
+    }
+    
+    public static boolean isValid(String state, String city) {
+        return states.contains(state) && cities.get(state).contains(city);
+    }
     
 }

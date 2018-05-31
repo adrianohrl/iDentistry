@@ -9,7 +9,7 @@ package tech.adrianohrl.identistry.view.wizards;
  *
  * @author adrianohrl
  */
-public enum NewPersonTypes {
+public enum NewWizardTypes {
     
     NEW_PATIENT("New patient ..."),
     NEW_ASSISTANT("New assistant ..."),
@@ -17,7 +17,7 @@ public enum NewPersonTypes {
     
     private final String title;
 
-    private NewPersonTypes(String title) {
+    private NewWizardTypes(String title) {
         this.title = title;
     }
 
