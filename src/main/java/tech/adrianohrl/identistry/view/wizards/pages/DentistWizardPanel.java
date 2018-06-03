@@ -20,7 +20,7 @@ public class DentistWizardPanel extends AbstractWizardPage {
     
     private static final Logger logger = Logger.getLogger(DentistWizardPanel.class);
     private final AbstractWizardPage nextPage = null;
-    private final DentistPanel panel = new DentistPanel();
+    private final DentistPanel panel = new DentistPanel(this);
 
     public DentistWizardPanel(NewWizardTypes type) {
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");

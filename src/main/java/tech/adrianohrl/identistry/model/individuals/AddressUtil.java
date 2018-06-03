@@ -39,8 +39,8 @@ public class AddressUtil {
             int counter = 0;
             while (line != null) {
                 String[] splitted = line.split(",");
-                System.out.println("uf: " + splitted[0] + ", state: " + splitted[1]);
                 states.add(splitted[1]);
+                cities.put(splitted[1], new ArrayList<>());
                 counter++;
                 line = reader.readLine();
             }
@@ -49,10 +49,6 @@ public class AddressUtil {
             logger.error("FileNotFoundException caught while reading state list: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException caught while reading state list: " + e.getMessage());
-        }
-        for (String state : states) {
-            cities.put(state, new ArrayList<>());
-            System.out.println("state: " + state + ", size: " + cities.size());
         }
         try {
             URL url = classLoader.getResource(PropertyUtil.getProperty("data.set.cities"));
@@ -63,7 +59,6 @@ public class AddressUtil {
             int counter = 0;
             while (line != null) {
                 String[] splitted = line.split(",");
-                System.out.println("state: " + splitted[0] + ", city: " + splitted[1]);
                 cities.get(splitted[0]).add(splitted[1]);
                 counter++;
                 line = reader.readLine();

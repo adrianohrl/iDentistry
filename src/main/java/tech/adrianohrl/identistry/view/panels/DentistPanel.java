@@ -7,6 +7,7 @@ package tech.adrianohrl.identistry.view.panels;
 
 import java.awt.Component;
 import org.apache.log4j.Logger;
+import se.gustavkarlsson.gwiz.AbstractWizardPage;
 
 /**
  *
@@ -15,11 +16,14 @@ import org.apache.log4j.Logger;
 public class DentistPanel extends javax.swing.JPanel implements WizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(DentistPanel.class);
+    private final AbstractWizardPage parent;
 
     /**
      * Creates new form DentistPanel
+     * @param parent
      */
-    public DentistPanel() {
+    public DentistPanel(AbstractWizardPage parent) {
+        this.parent = parent;
         initComponents();
     }
 

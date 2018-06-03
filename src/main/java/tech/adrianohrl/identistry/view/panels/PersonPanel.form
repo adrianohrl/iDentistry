@@ -9,6 +9,9 @@
     </Component>
   </NonVisualComponents>
   <Properties>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[900, 500]"/>
+    </Property>
     <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
       <ComponentRef name="nameTextField"/>
     </Property>
@@ -28,18 +31,18 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="socialNetworksPanel" max="32767" attributes="0"/>
                   <Component id="addressPanel" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Component id="personPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" pref="72" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="personPanel" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="picturePanel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="socialNetworksPanel" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -55,7 +58,7 @@
               <Component id="addressPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="socialNetworksPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="31" max="32767" attributes="0"/>
+              <EmptySpace pref="36" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -73,44 +76,45 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="nameLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="genderLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="dobLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="cpfLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="occupationLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="dobLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="genderLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="genderPanel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="dobFormattedTextField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="cpfFormattedTextField" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="genderPanel" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="dobFormattedTextField" linkSize="3" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cpfFormattedTextField" linkSize="3" alignment="0" max="32767" attributes="0"/>
+                              <Component id="occupationTextField" linkSize="3" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="phoneLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="rgLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rgTextField" min="-2" pref="150" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <Component id="phoneFormattedTextField" min="-2" pref="150" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="whatsappLabelIcon" min="-2" pref="17" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="whatsappLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="whatsappCheckBox" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="phoneFormattedTextField" linkSize="3" pref="150" max="32767" attributes="0"/>
+                              <Component id="rgTextField" linkSize="3" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="whatsappLabelIcon" min="-2" pref="17" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="whatsappLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="whatsappCheckBox" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Component id="nameTextField" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -119,30 +123,35 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="nameTextField" alignment="3" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="genderLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="genderPanel" alignment="2" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="whatsappLabelIcon" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="whatsappLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="whatsappCheckBox" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="phoneFormattedTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="phoneLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="dobFormattedTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="dobLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameLabel" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameTextField" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="cpfLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="cpfFormattedTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="rgLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="rgTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="genderPanel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="genderLabel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="whatsappLabel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="whatsappCheckBox" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="whatsappLabelIcon" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="phoneFormattedTextField" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="phoneLabel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="dobFormattedTextField" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="dobLabel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="cpfLabel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="cpfFormattedTextField" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="rgLabel" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="rgTextField" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="occupationLabel" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="occupationTextField" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -212,21 +221,42 @@
             <Component class="javax.swing.JRadioButton" name="genderFemaleRadioButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Female"/>
+                <Property name="actionCommand" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="&quot;Female&quot;" type="code"/>
+                </Property>
                 <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="genderMaleRadioButton"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="genderFemaleRadioButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="genderMaleRadioButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Male"/>
+                <Property name="actionCommand" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="&quot;Male&quot;" type="code"/>
+                </Property>
                 <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="dobFormattedTextField"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="genderMaleRadioButtonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JLabel" name="dobLabel">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="dobFormattedTextField"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Day of Birth *:"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JFormattedTextField" name="dobFormattedTextField">
           <Properties>
             <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
@@ -235,6 +265,9 @@
             <Property name="toolTipText" type="java.lang.String" value="Enter the day-of-birth."/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="phoneFormattedTextField"/>
+            </Property>
+            <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new Date()" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -253,6 +286,9 @@
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="whatsappCheckBox"/>
             </Property>
+            <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="&quot;&quot;" type="code"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="whatsappLabelIcon">
@@ -263,6 +299,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="whatsappCheckBox"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[21, 21]"/>
             </Property>
@@ -277,6 +314,7 @@
         <Component class="javax.swing.JLabel" name="whatsappLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value=":"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="whatsappCheckBox">
@@ -284,6 +322,29 @@
             <Property name="toolTipText" type="java.lang.String" value="Select if the associated phone number has WhatsApp."/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="cpfFormattedTextField"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="cpfLabel">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="cpfFormattedTextField"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="CPF:"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JFormattedTextField" name="cpfFormattedTextField">
+          <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
+              <Format format="###.###.###-##" subtype="-1" type="5"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Enter the CPF number."/>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="rgTextField"/>
+            </Property>
+            <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="&quot;&quot;" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -296,41 +357,25 @@
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="cpfLabel">
-          <Properties>
-            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="cpfFormattedTextField"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="CPF:"/>
-            <Property name="focusable" type="boolean" value="false"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JTextField" name="rgTextField">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Enter the RG number."/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="occupationTextField"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="occupationLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Occupation:"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="occupationTextField">
+          <Properties>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="streetTextField"/>
             </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JFormattedTextField" name="cpfFormattedTextField">
-          <Properties>
-            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
-              <Format format="###.###.###-##" subtype="-1" type="5"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Enter the CPF number."/>
-            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="rgTextField"/>
-            </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="dobLabel">
-          <Properties>
-            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="dobFormattedTextField"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Day of Birth *:"/>
-            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -356,17 +401,17 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="zipFormattedTextField" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="zipFormattedTextField" linkSize="4" min="-2" pref="150" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="stateLabel" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="stateLabel" min="-2" pref="52" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="stateComboBox" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="stateComboBox" linkSize="4" min="-2" pref="150" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="obsTextField" alignment="0" max="32767" attributes="0"/>
+                      <Component id="obsTextField" max="32767" attributes="0"/>
                       <Component id="streetTextField" alignment="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" pref="136" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="areaLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="numberLabel" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -374,9 +419,9 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="numberFormattedTextField" max="32767" attributes="0"/>
-                      <Component id="areaTextField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="cityComboBox" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Component id="numberFormattedTextField" linkSize="4" max="32767" attributes="0"/>
+                      <Component id="areaTextField" linkSize="4" alignment="0" max="32767" attributes="0"/>
+                      <Component id="cityComboBox" linkSize="4" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -387,26 +432,26 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="streetLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="streetTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="numberLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="numberFormattedTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="streetLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="streetTextField" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="numberLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="numberFormattedTextField" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="obsLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="obsTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="areaLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="areaTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="obsLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="obsTextField" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="areaLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="areaTextField" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="zipLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="zipFormattedTextField" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="stateLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="stateComboBox" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="cityLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="cityComboBox" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="zipLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="zipFormattedTextField" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="stateLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="stateComboBox" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="cityLabel" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="cityComboBox" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -426,8 +471,14 @@
         <Component class="javax.swing.JTextField" name="streetTextField">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Enter the street name."/>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[400, 18]"/>
+            </Property>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="numberFormattedTextField"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[400, 18]"/>
             </Property>
           </Properties>
         </Component>
@@ -480,8 +531,14 @@
         <Component class="javax.swing.JTextField" name="obsTextField">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Enter additional informations about the address."/>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[400, 18]"/>
+            </Property>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="areaTextField"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[400, 18]"/>
             </Property>
           </Properties>
         </Component>
@@ -502,6 +559,9 @@
             <Property name="toolTipText" type="java.lang.String" value="Enter the address ZIP code."/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="stateComboBox"/>
+            </Property>
+            <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="&quot;&quot;" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -545,6 +605,9 @@
               <ComponentRef name="facebookTextField"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cityComboBoxActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -562,7 +625,15 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="pictureLabel" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="pictureLabel" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                          <Component id="pictureEditButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="pictureRemoveButton" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -570,8 +641,12 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="pictureRemoveButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="pictureEditButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="pictureLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="pictureLabel" pref="145" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -581,14 +656,56 @@
         <Component class="javax.swing.JLabel" name="pictureLabel">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/no-picture/128x128.png"/>
-            </Property>
             <Property name="toolTipText" type="java.lang.String" value="Alter profile picture"/>
+            <Property name="requestFocusEnabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pictureLabelMouseClicked"/>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="pictureLabelKeyPressed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="pictureLabel.setIcon(ImageUtil.getDefaultProfilePicture());"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="pictureRemoveButton">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="IconFontSwing.buildIcon(FontAwesome.TRASH, 15)" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 20]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 20]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 20]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pictureRemoveButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="pictureEditButton">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="IconFontSwing.buildIcon(FontAwesome.PENCIL, 15)" type="code"/>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 20]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 20]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 20]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pictureEditButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -606,32 +723,30 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="occupationLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="intagramLabelIcon" min="-2" pref="17" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="instagramLabel1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="facebookLabelIcon" min="-2" pref="17" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="facebookLabel1" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="emailLabelIcon" alignment="2" min="-2" pref="17" max="-2" attributes="0"/>
+                      <Component id="facebookLabelIcon" alignment="2" min="-2" pref="17" max="-2" attributes="0"/>
+                      <Component id="intagramLabelIcon" alignment="2" min="-2" pref="17" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="emailLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="facebookLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="instagramLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="occupationTextField" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Component id="emailTextField" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="facebookLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="facebookTextField" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="facebookTextField" linkSize="5" min="-2" pref="150" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="instagramLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="instagramTextField" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="instagramTextField" linkSize="5" min="-2" pref="150" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -640,25 +755,26 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="facebookLabelIcon" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="facebookLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="facebookLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="facebookTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="emailLabelIcon" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="emailLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="emailTextField" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
-                      <Component id="intagramLabelIcon" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="instagramLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="instagramLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="instagramTextField" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="facebookLabelIcon" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="facebookLabel1" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="facebookLabel" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="facebookTextField" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="occupationLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="occupationTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="intagramLabelIcon" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="instagramLabel1" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="instagramLabel" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="instagramTextField" linkSize="8" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -674,6 +790,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="facebookTextField"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[21, 21]"/>
             </Property>
@@ -685,19 +802,16 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="facebookLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="https://facebook.com/"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="instagramLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="https://instagram.com/"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="facebookLabel1">
           <Properties>
             <Property name="text" type="java.lang.String" value=":"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="facebookLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="https://facebook.com/"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="facebookTextField">
@@ -715,6 +829,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="instagramTextField"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[21, 21]"/>
             </Property>
@@ -729,24 +844,52 @@
         <Component class="javax.swing.JLabel" name="instagramLabel1">
           <Properties>
             <Property name="text" type="java.lang.String" value=":"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="instagramLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="https://instagram.com/"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="instagramTextField">
           <Properties>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="occupationTextField"/>
+              <ComponentRef name="pictureLabel"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="occupationLabel">
+        <Component class="javax.swing.JLabel" name="emailLabelIcon">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Occupation:"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="IconFontSwing.buildIcon(FontAwesome.FACEBOOK_OFFICIAL, 20)" type="code"/>
+            </Property>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="facebookTextField"/>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[21, 21]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[21, 21]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[21, 21]"/>
+            </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="occupationTextField">
+        <Component class="javax.swing.JLabel" name="emailLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value=":"/>
+            <Property name="focusable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="emailTextField">
           <Properties>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-              <ComponentRef name="pictureLabel"/>
+              <ComponentRef name="instagramTextField"/>
             </Property>
           </Properties>
         </Component>

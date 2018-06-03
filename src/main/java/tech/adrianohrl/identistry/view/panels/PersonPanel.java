@@ -13,9 +13,13 @@ import javax.swing.ButtonModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
+import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.model.individuals.Address;
 import tech.adrianohrl.identistry.model.individuals.AddressUtil;
 import tech.adrianohrl.identistry.model.individuals.Genders;
@@ -28,20 +32,26 @@ import tech.adrianohrl.identistry.view.components.ImageUtil;
 public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(PersonPanel.class);
+    private final TextFieldChangeListener listener = new TextFieldChangeListener();
+    private final AbstractWizardPage parent;
 
     /**
      * Creates new form NewPersonPanel
+     * @param parent
      */
-    public PersonPanel() {
+    public PersonPanel(AbstractWizardPage parent) {
+        this.parent = parent;
         initComponents();
+        setMandatoryFieldsListeners();
     }
     
     public String getPersonName() {
         return nameTextField.getText();
     }
     
-    public ImageIcon getPersonProfilePicture() {
-        return (ImageIcon) pictureLabel.getIcon();
+    public String getPersonProfilePicture() {
+        ImageIcon icon = (ImageIcon) pictureLabel.getIcon();
+        return icon != null ? icon.getDescription() : "";
     }
     
     public Genders getPersonGender() {
@@ -59,7 +69,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     }
     
     public String getPersonPhone() {
-        return phoneFormattedTextField.getText();
+        return (String) phoneFormattedTextField.getValue();
     }
     
     public boolean getPersonPhoneWhatsApp() {
@@ -67,22 +77,63 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     }
     
     public String getPersonCPF() {
-        return cpfFormattedTextField.getText();
+        return (String) cpfFormattedTextField.getValue();
     }
     
     public String getPersonRG() {
         return rgTextField.getText();
     }
     
-    public Address getPersonAddress() {
-        String street = streetTextField.getText();
-        int number = (int) numberFormattedTextField.getValue();
-        String obs = obsTextField.getText();
-        String area = areaTextField.getText();
-        String zip = zipFormattedTextField.getText();
+    public String getPersonAddressStreet() {
+        return streetTextField.getText();
+    }
+    
+    public int getPersonAddressNumber() {
+        Long number = (Long) numberFormattedTextField.getValue();
+        return number != null ? number.intValue() : 0;
+    }
+    
+    public String getPersonAddressObservation() {
+        return obsTextField.getText();
+    }
+    
+    public String getPersonAddressArea() {
+        return areaTextField.getText();
+    }
+    
+    public String getPersonAddressZIP() {
+        String zip = (String) zipFormattedTextField.getValue();
+        return zip != null ? zip : "";
+    }
+    
+    public String getPersonAddressCity() {
         String city = (String) cityComboBox.getSelectedItem();
+        return city != null ? city : "";
+    }
+    
+    public String getPersonAddressState() {
         String state = (String) stateComboBox.getSelectedItem();
-        return new Address(street, number, area, obs, zip, city, state, "Brasil");
+        return state != null ? state : "";
+    }
+    
+    public String getPersonAddressCountry() {
+        return "Brasil";
+    }
+    
+    public Address getPersonAddress() {
+        String street = getPersonAddressStreet();
+        int number = getPersonAddressNumber();
+        String obs = getPersonAddressObservation();
+        String area = getPersonAddressArea();
+        String zip = getPersonAddressZIP();
+        String city = getPersonAddressCity();
+        String state = getPersonAddressState();
+        String country = getPersonAddressCountry();
+        return new Address(street, number, area, obs, zip, city, state, country);
+    }
+    
+    public String getPersonEmail() {
+        return emailTextField.getText();
     }
     
     public String getPersonFacebook() {
@@ -109,14 +160,14 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
             
     @Override
     public boolean isFilled() {
+        System.out.println("picture: " + getPersonProfilePicture());
         return !getPersonName().isEmpty() 
             && getPersonGender() != null
             && getPersonDayOfBirth() != null
             && !getPersonPhone().isEmpty()
-            //&& !getPersonCPF().isEmpty()
             && !getPersonRG().isEmpty()
             && isAddressFilled()
-            && getPersonProfilePicture() != null;
+            && !getPersonProfilePicture().isEmpty();
     }
 
     @Override
@@ -148,6 +199,55 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         model.setSelectedItem("");
         return model;
     }
+    
+    private void editProfilePicture() {
+        ImageIcon icon = ImageUtil.chooseImageIcon(this);
+        pictureRemoveButton.setEnabled(true);
+        if (icon == null) {
+            pictureRemoveButton.setEnabled(false);
+            icon = ImageUtil.getDefaultProfilePicture();
+        }
+        pictureLabel.setIcon(icon);
+        parent.updateWizardButtons();
+    }
+    
+    private void removeProfilePicture() {
+        pictureLabel.setIcon(ImageUtil.getDefaultProfilePicture());
+        parent.updateWizardButtons();
+    }
+
+    private void setMandatoryFieldsListeners() {
+        listener.assignToListenerList(nameTextField);
+        listener.assignToListenerList(dobFormattedTextField);
+        listener.assignToListenerList(phoneFormattedTextField);
+        listener.assignToListenerList(rgTextField);
+        listener.assignToListenerList(streetTextField);
+        listener.assignToListenerList(numberFormattedTextField);
+        listener.assignToListenerList(areaTextField);
+    }
+    
+    private class TextFieldChangeListener implements DocumentListener {
+        
+        public void assignToListenerList(JTextField field) {
+            field.getDocument().addDocumentListener(listener);
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            parent.updateWizardButtons();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            parent.updateWizardButtons();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            parent.updateWizardButtons();
+        }
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -166,17 +266,19 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         genderPanel = new javax.swing.JPanel();
         genderFemaleRadioButton = new javax.swing.JRadioButton();
         genderMaleRadioButton = new javax.swing.JRadioButton();
+        dobLabel = new javax.swing.JLabel();
         dobFormattedTextField = new javax.swing.JFormattedTextField();
         phoneLabel = new javax.swing.JLabel();
         phoneFormattedTextField = new javax.swing.JFormattedTextField();
         whatsappLabelIcon = new javax.swing.JLabel();
         whatsappLabel = new javax.swing.JLabel();
         whatsappCheckBox = new javax.swing.JCheckBox();
-        rgLabel = new javax.swing.JLabel();
         cpfLabel = new javax.swing.JLabel();
-        rgTextField = new javax.swing.JTextField();
         cpfFormattedTextField = new javax.swing.JFormattedTextField();
-        dobLabel = new javax.swing.JLabel();
+        rgLabel = new javax.swing.JLabel();
+        rgTextField = new javax.swing.JTextField();
+        occupationLabel = new javax.swing.JLabel();
+        occupationTextField = new javax.swing.JTextField();
         addressPanel = new javax.swing.JPanel();
         streetLabel = new javax.swing.JLabel();
         streetTextField = new javax.swing.JTextField();
@@ -194,21 +296,25 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         cityComboBox = new javax.swing.JComboBox();
         picturePanel = new javax.swing.JPanel();
         pictureLabel = new javax.swing.JLabel();
+        pictureRemoveButton = new javax.swing.JButton();
+        pictureEditButton = new javax.swing.JButton();
         socialNetworksPanel = new javax.swing.JPanel();
         facebookLabelIcon = new javax.swing.JLabel();
-        facebookLabel = new javax.swing.JLabel();
-        instagramLabel = new javax.swing.JLabel();
         facebookLabel1 = new javax.swing.JLabel();
+        facebookLabel = new javax.swing.JLabel();
         facebookTextField = new javax.swing.JTextField();
         intagramLabelIcon = new javax.swing.JLabel();
         instagramLabel1 = new javax.swing.JLabel();
+        instagramLabel = new javax.swing.JLabel();
         instagramTextField = new javax.swing.JTextField();
-        occupationLabel = new javax.swing.JLabel();
-        occupationTextField = new javax.swing.JTextField();
+        emailLabelIcon = new javax.swing.JLabel();
+        emailLabel = new javax.swing.JLabel();
+        emailTextField = new javax.swing.JTextField();
 
         genderButtonGroup.add(genderFemaleRadioButton);
         genderButtonGroup.add(genderMaleRadioButton);
 
+        setMinimumSize(new java.awt.Dimension(900, 500));
         setNextFocusableComponent(nameTextField);
 
         personPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Personal Data"));
@@ -229,10 +335,22 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         genderPanel.setMinimumSize(new java.awt.Dimension(20, 22));
 
         genderFemaleRadioButton.setText("Female");
+        genderFemaleRadioButton.setActionCommand("Female");
         genderFemaleRadioButton.setNextFocusableComponent(genderMaleRadioButton);
+        genderFemaleRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genderFemaleRadioButtonActionPerformed(evt);
+            }
+        });
 
         genderMaleRadioButton.setText("Male");
+        genderMaleRadioButton.setActionCommand("Male");
         genderMaleRadioButton.setNextFocusableComponent(dobFormattedTextField);
+        genderMaleRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genderMaleRadioButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout genderPanelLayout = new javax.swing.GroupLayout(genderPanel);
         genderPanel.setLayout(genderPanelLayout);
@@ -252,9 +370,14 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                 .addComponent(genderFemaleRadioButton))
         );
 
+        dobLabel.setLabelFor(dobFormattedTextField);
+        dobLabel.setText("Day of Birth *:");
+        dobLabel.setFocusable(false);
+
         dobFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
         dobFormattedTextField.setToolTipText("Enter the day-of-birth.");
         dobFormattedTextField.setNextFocusableComponent(phoneFormattedTextField);
+        dobFormattedTextField.setValue(new Date());
 
         phoneLabel.setText("Phone *:");
         phoneLabel.setFocusable(false);
@@ -266,28 +389,24 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         }
         phoneFormattedTextField.setToolTipText("Enter the phone number.");
         phoneFormattedTextField.setNextFocusableComponent(whatsappCheckBox);
+        phoneFormattedTextField.setValue("");
 
         whatsappLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.WHATSAPP, 20));
         whatsappLabelIcon.setLabelFor(whatsappCheckBox);
+        whatsappLabelIcon.setFocusable(false);
         whatsappLabelIcon.setMaximumSize(new java.awt.Dimension(21, 21));
         whatsappLabelIcon.setMinimumSize(new java.awt.Dimension(21, 21));
         whatsappLabelIcon.setPreferredSize(new java.awt.Dimension(21, 21));
 
         whatsappLabel.setText(":");
+        whatsappLabel.setFocusable(false);
 
         whatsappCheckBox.setToolTipText("Select if the associated phone number has WhatsApp.");
         whatsappCheckBox.setNextFocusableComponent(cpfFormattedTextField);
 
-        rgLabel.setLabelFor(rgTextField);
-        rgLabel.setText("RG *:");
-        rgLabel.setFocusable(false);
-
         cpfLabel.setLabelFor(cpfFormattedTextField);
         cpfLabel.setText("CPF:");
         cpfLabel.setFocusable(false);
-
-        rgTextField.setToolTipText("Enter the RG number.");
-        rgTextField.setNextFocusableComponent(streetTextField);
 
         try {
             cpfFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
@@ -296,10 +415,19 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         }
         cpfFormattedTextField.setToolTipText("Enter the CPF number.");
         cpfFormattedTextField.setNextFocusableComponent(rgTextField);
+        cpfFormattedTextField.setValue("");
 
-        dobLabel.setLabelFor(dobFormattedTextField);
-        dobLabel.setText("Day of Birth *:");
-        dobLabel.setFocusable(false);
+        rgLabel.setLabelFor(rgTextField);
+        rgLabel.setText("RG *:");
+        rgLabel.setFocusable(false);
+
+        rgTextField.setToolTipText("Enter the RG number.");
+        rgTextField.setNextFocusableComponent(occupationTextField);
+
+        occupationLabel.setText("Occupation:");
+        occupationLabel.setFocusable(false);
+
+        occupationTextField.setNextFocusableComponent(streetTextField);
 
         javax.swing.GroupLayout personPanelLayout = new javax.swing.GroupLayout(personPanel);
         personPanel.setLayout(personPanelLayout);
@@ -308,51 +436,56 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
             .addGroup(personPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(genderLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cpfLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(occupationLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dobLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cpfLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(genderLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nameLabel, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(personPanelLayout.createSequentialGroup()
-                        .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(genderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dobFormattedTextField)
-                            .addComponent(cpfFormattedTextField))
-                        .addGap(18, 18, 18)
+                            .addComponent(cpfFormattedTextField)
+                            .addComponent(occupationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(phoneLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(rgLabel, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rgTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(personPanelLayout.createSequentialGroup()
-                                .addComponent(phoneFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(whatsappLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(whatsappLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(whatsappCheckBox))))
+                        .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(phoneFormattedTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(rgTextField))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(whatsappLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(whatsappLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(whatsappCheckBox)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(nameTextField))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        personPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cpfFormattedTextField, dobFormattedTextField, genderPanel, occupationTextField, phoneFormattedTextField, rgTextField});
+
         personPanelLayout.setVerticalGroup(
             personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(personPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLabel)
-                    .addComponent(nameTextField))
+                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(genderLabel)
-                    .addComponent(genderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(genderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(genderLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(whatsappLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(whatsappLabel)
                     .addComponent(whatsappCheckBox)
+                    .addComponent(whatsappLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(phoneFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(phoneLabel)
                     .addComponent(dobFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,8 +496,14 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                     .addComponent(cpfFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rgLabel)
                     .addComponent(rgTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(occupationLabel)
+                    .addComponent(occupationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        personPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cpfFormattedTextField, cpfLabel, dobFormattedTextField, dobLabel, genderLabel, genderPanel, nameLabel, nameTextField, occupationLabel, occupationTextField, phoneFormattedTextField, phoneLabel, rgLabel, rgTextField, whatsappCheckBox, whatsappLabel, whatsappLabelIcon});
 
         addressPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Address"));
 
@@ -373,7 +512,9 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         streetLabel.setFocusable(false);
 
         streetTextField.setToolTipText("Enter the street name.");
+        streetTextField.setMinimumSize(new java.awt.Dimension(400, 18));
         streetTextField.setNextFocusableComponent(numberFormattedTextField);
+        streetTextField.setPreferredSize(new java.awt.Dimension(400, 18));
 
         numberLabel.setLabelFor(numberFormattedTextField);
         numberLabel.setText("Number *:");
@@ -395,7 +536,9 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         obsLabel.setFocusable(false);
 
         obsTextField.setToolTipText("Enter additional informations about the address.");
+        obsTextField.setMinimumSize(new java.awt.Dimension(400, 18));
         obsTextField.setNextFocusableComponent(areaTextField);
+        obsTextField.setPreferredSize(new java.awt.Dimension(400, 18));
 
         zipLabel.setLabelFor(zipFormattedTextField);
         zipLabel.setText("ZIP Code:");
@@ -408,6 +551,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         }
         zipFormattedTextField.setToolTipText("Enter the address ZIP code.");
         zipFormattedTextField.setNextFocusableComponent(stateComboBox);
+        zipFormattedTextField.setValue("");
 
         stateLabel.setLabelFor(stateComboBox);
         stateLabel.setText("State *:");
@@ -429,6 +573,11 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         cityComboBox.setToolTipText("Enter the city name.");
         cityComboBox.setEnabled(false);
         cityComboBox.setNextFocusableComponent(facebookTextField);
+        cityComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cityComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout addressPanelLayout = new javax.swing.GroupLayout(addressPanel);
         addressPanel.setLayout(addressPanelLayout);
@@ -445,12 +594,12 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                     .addGroup(addressPanelLayout.createSequentialGroup()
                         .addComponent(zipFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(stateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(stateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stateComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(obsTextField)
-                    .addComponent(streetTextField))
-                .addGap(18, 18, Short.MAX_VALUE)
+                    .addComponent(obsTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(streetTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 136, Short.MAX_VALUE)
                 .addGroup(addressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(areaLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(numberLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -462,6 +611,9 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                     .addComponent(cityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        addressPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {areaTextField, cityComboBox, numberFormattedTextField, stateComboBox, zipFormattedTextField});
+
         addressPanelLayout.setVerticalGroup(
             addressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addressPanelLayout.createSequentialGroup()
@@ -488,11 +640,14 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                 .addContainerGap())
         );
 
+        addressPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {areaLabel, areaTextField, cityComboBox, cityLabel, numberFormattedTextField, numberLabel, obsLabel, obsTextField, stateComboBox, stateLabel, streetLabel, streetTextField, zipFormattedTextField, zipLabel});
+
         picturePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Picture"));
 
         pictureLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        pictureLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/no-picture/128x128.png"))); // NOI18N
         pictureLabel.setToolTipText("Alter profile picture");
+        pictureLabel.setRequestFocusEnabled(false);
+        pictureLabel.setIcon(ImageUtil.getDefaultProfilePicture());
         pictureLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pictureLabelMouseClicked(evt);
@@ -504,20 +659,52 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
             }
         });
 
+        pictureRemoveButton.setIcon(IconFontSwing.buildIcon(FontAwesome.TRASH, 15));
+        pictureRemoveButton.setEnabled(false);
+        pictureRemoveButton.setFocusable(false);
+        pictureRemoveButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        pictureRemoveButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        pictureRemoveButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        pictureRemoveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pictureRemoveButtonActionPerformed(evt);
+            }
+        });
+
+        pictureEditButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PENCIL, 15));
+        pictureEditButton.setFocusable(false);
+        pictureEditButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        pictureEditButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        pictureEditButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        pictureEditButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pictureEditButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout picturePanelLayout = new javax.swing.GroupLayout(picturePanel);
         picturePanel.setLayout(picturePanelLayout);
         picturePanelLayout.setHorizontalGroup(
             picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(picturePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pictureLabel)
+                .addGroup(picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pictureLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(picturePanelLayout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(pictureEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pictureRemoveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         picturePanelLayout.setVerticalGroup(
             picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(picturePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pictureLabel)
+                .addGroup(picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pictureRemoveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pictureEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pictureLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -525,51 +712,64 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
 
         facebookLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.FACEBOOK_OFFICIAL, 20));
         facebookLabelIcon.setLabelFor(facebookTextField);
+        facebookLabelIcon.setFocusable(false);
         facebookLabelIcon.setMaximumSize(new java.awt.Dimension(21, 21));
         facebookLabelIcon.setMinimumSize(new java.awt.Dimension(21, 21));
         facebookLabelIcon.setPreferredSize(new java.awt.Dimension(21, 21));
 
-        facebookLabel.setText("https://facebook.com/");
-
-        instagramLabel.setText("https://instagram.com/");
-
         facebookLabel1.setText(":");
+        facebookLabel1.setFocusable(false);
+
+        facebookLabel.setText("https://facebook.com/");
+        facebookLabel.setFocusable(false);
 
         facebookTextField.setNextFocusableComponent(instagramTextField);
 
         intagramLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.INSTAGRAM, 20));
         intagramLabelIcon.setLabelFor(instagramTextField);
+        intagramLabelIcon.setFocusable(false);
         intagramLabelIcon.setMaximumSize(new java.awt.Dimension(21, 21));
         intagramLabelIcon.setMinimumSize(new java.awt.Dimension(21, 21));
         intagramLabelIcon.setPreferredSize(new java.awt.Dimension(21, 21));
 
         instagramLabel1.setText(":");
+        instagramLabel1.setFocusable(false);
 
-        instagramTextField.setNextFocusableComponent(occupationTextField);
+        instagramLabel.setText("https://instagram.com/");
+        instagramLabel.setFocusable(false);
 
-        occupationLabel.setText("Occupation:");
+        instagramTextField.setNextFocusableComponent(pictureLabel);
 
-        occupationTextField.setNextFocusableComponent(pictureLabel);
+        emailLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.FACEBOOK_OFFICIAL, 20));
+        emailLabelIcon.setLabelFor(facebookTextField);
+        emailLabelIcon.setFocusable(false);
+        emailLabelIcon.setMaximumSize(new java.awt.Dimension(21, 21));
+        emailLabelIcon.setMinimumSize(new java.awt.Dimension(21, 21));
+        emailLabelIcon.setPreferredSize(new java.awt.Dimension(21, 21));
+
+        emailLabel.setText(":");
+        emailLabel.setFocusable(false);
+
+        emailTextField.setNextFocusableComponent(instagramTextField);
 
         javax.swing.GroupLayout socialNetworksPanelLayout = new javax.swing.GroupLayout(socialNetworksPanel);
         socialNetworksPanel.setLayout(socialNetworksPanelLayout);
         socialNetworksPanelLayout.setHorizontalGroup(
             socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(socialNetworksPanelLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(occupationLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, socialNetworksPanelLayout.createSequentialGroup()
-                        .addComponent(intagramLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(instagramLabel1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, socialNetworksPanelLayout.createSequentialGroup()
-                        .addComponent(facebookLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(facebookLabel1)))
+                .addContainerGap()
+                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(emailLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(facebookLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(intagramLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(emailLabel)
+                    .addComponent(facebookLabel1)
+                    .addComponent(instagramLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(occupationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(socialNetworksPanelLayout.createSequentialGroup()
                         .addComponent(facebookLabel)
                         .addGap(0, 0, 0)
@@ -580,10 +780,18 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                         .addComponent(instagramTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        socialNetworksPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {facebookTextField, instagramTextField});
+
         socialNetworksPanelLayout.setVerticalGroup(
             socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(socialNetworksPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, socialNetworksPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(emailLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emailLabel)
+                    .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(facebookLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(facebookLabel1)
@@ -595,27 +803,25 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                     .addComponent(instagramLabel1)
                     .addComponent(instagramLabel)
                     .addComponent(instagramTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(socialNetworksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(occupationLabel)
-                    .addComponent(occupationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        socialNetworksPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {emailTextField, facebookLabel, facebookLabel1, facebookLabelIcon, facebookTextField, instagramLabel, instagramLabel1, instagramTextField, intagramLabelIcon});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(socialNetworksPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(addressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(personPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 72, Short.MAX_VALUE)
-                        .addComponent(picturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(socialNetworksPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(personPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(picturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -628,7 +834,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
                 .addComponent(addressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(socialNetworksPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {personPanel, picturePanel});
@@ -636,19 +842,12 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pictureLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pictureLabelMouseClicked
-        ImageIcon icon = ImageUtil.chooseImageIcon(this);
-        if (icon != null) {
-            pictureLabel.setIcon(icon);
-        }        
+        editProfilePicture();
     }//GEN-LAST:event_pictureLabelMouseClicked
 
     private void pictureLabelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pictureLabelKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {
-            System.out.println("Space key pressed over the picture label...");
-            ImageIcon icon = ImageUtil.chooseImageIcon(this);
-            if (icon != null) {
-                pictureLabel.setIcon(icon);
-            }  
+        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {            
+            editProfilePicture();
         }
     }//GEN-LAST:event_pictureLabelKeyPressed
 
@@ -660,11 +859,31 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
             cityComboBox.setEnabled(false);
             return;
         }
-        System.out.println("State selected: " + state);
         cityComboBox.setModel(getCities(state));
         cityComboBox.setSelectedItem("");
         cityComboBox.setEnabled(true);
+        parent.updateWizardButtons();
     }//GEN-LAST:event_stateComboBoxActionPerformed
+
+    private void genderFemaleRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderFemaleRadioButtonActionPerformed
+        parent.updateWizardButtons();
+    }//GEN-LAST:event_genderFemaleRadioButtonActionPerformed
+
+    private void genderMaleRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderMaleRadioButtonActionPerformed
+        parent.updateWizardButtons();
+    }//GEN-LAST:event_genderMaleRadioButtonActionPerformed
+
+    private void cityComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cityComboBoxActionPerformed
+        parent.updateWizardButtons();
+    }//GEN-LAST:event_cityComboBoxActionPerformed
+
+    private void pictureRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pictureRemoveButtonActionPerformed
+        removeProfilePicture();
+    }//GEN-LAST:event_pictureRemoveButtonActionPerformed
+
+    private void pictureEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pictureEditButtonActionPerformed
+        editProfilePicture();
+    }//GEN-LAST:event_pictureEditButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel addressPanel;
@@ -676,6 +895,9 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JLabel cpfLabel;
     private javax.swing.JFormattedTextField dobFormattedTextField;
     private javax.swing.JLabel dobLabel;
+    private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel emailLabelIcon;
+    private javax.swing.JTextField emailTextField;
     private javax.swing.JLabel facebookLabel;
     private javax.swing.JLabel facebookLabel1;
     private javax.swing.JLabel facebookLabelIcon;
@@ -700,8 +922,10 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JPanel personPanel;
     private javax.swing.JFormattedTextField phoneFormattedTextField;
     private javax.swing.JLabel phoneLabel;
+    private javax.swing.JButton pictureEditButton;
     private javax.swing.JLabel pictureLabel;
     private javax.swing.JPanel picturePanel;
+    private javax.swing.JButton pictureRemoveButton;
     private javax.swing.JLabel rgLabel;
     private javax.swing.JTextField rgTextField;
     private javax.swing.JPanel socialNetworksPanel;
@@ -715,5 +939,5 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
     private javax.swing.JFormattedTextField zipFormattedTextField;
     private javax.swing.JLabel zipLabel;
     // End of variables declaration//GEN-END:variables
-
+    
 }

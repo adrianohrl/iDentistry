@@ -35,6 +35,15 @@ public class PropertyUtil {
         return !filepath.startsWith("/") ? System.getProperty("user.home")  + "/" + filepath : filepath;
     }
     
+    public static String getDefaultProfilePicturePath() {
+        String path = PropertyUtil.getProperty("images.default.profile.picture");
+        System.out.println("default profile picture path: " + path);
+        ClassLoader classLoader = PropertyUtil.class.getClassLoader();
+        URL url = classLoader.getResource(path);
+        System.out.println("url path: " + url);
+        return url != null ? url.getFile() : "";
+    }
+    
     public static String getProperty(String property) {
         Properties properties = new Properties();
         ClassLoader classLoader = PropertyUtil.class.getClassLoader();

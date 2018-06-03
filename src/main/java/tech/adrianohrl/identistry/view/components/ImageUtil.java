@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
+import tech.adrianohrl.util.PropertyUtil;
  
 /**
  *
@@ -61,7 +62,20 @@ public class ImageUtil {
         try {
             Image image = ImageIO.read(file);
             logger.info("Opening " + file.getName() + ".");
-            return new ImageIcon(image);
+            return new ImageIcon(image, file.getPath());
+        } catch (IOException e) {
+            logger.error("Error while openning " + file.getName() + ".");
+            return null;
+        }
+    }
+    
+    public static ImageIcon getDefaultProfilePicture() {
+        String path = PropertyUtil.getDefaultProfilePicturePath();
+        File file = new File(path);
+        try {
+            Image image = ImageIO.read(file);
+            logger.info("Opening " + file.getName() + ".");
+            return new ImageIcon(image, "");
         } catch (IOException e) {
             logger.error("Error while openning " + file.getName() + ".");
             return null;

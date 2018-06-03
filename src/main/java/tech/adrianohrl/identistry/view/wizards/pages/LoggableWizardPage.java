@@ -20,7 +20,7 @@ public class LoggableWizardPage extends AbstractWizardPage {
     
     private static final Logger logger = Logger.getLogger(LoggableWizardPage.class);
     private final AbstractWizardPage nextPage;
-    private final LoggablePanel panel = new LoggablePanel();
+    private final LoggablePanel panel = new LoggablePanel(this);
 
     public LoggableWizardPage(NewWizardTypes type) {
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");

@@ -20,7 +20,7 @@ public class PersonWizardPage extends AbstractWizardPage {
     
     private static final Logger logger = Logger.getLogger(PersonWizardPage.class);
     private final AbstractWizardPage nextPage;
-    private final PersonPanel panel = new PersonPanel();
+    private final PersonPanel panel = new PersonPanel(this);
 
     public PersonWizardPage(NewWizardTypes type) {
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");

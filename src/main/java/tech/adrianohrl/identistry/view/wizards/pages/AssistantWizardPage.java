@@ -20,7 +20,7 @@ public class AssistantWizardPage extends AbstractWizardPage {
     
     private static final Logger logger = Logger.getLogger(AssistantWizardPage.class);
     private final AbstractWizardPage nextPage = null;
-    private final AssistantPanel panel = new AssistantPanel();
+    private final AssistantPanel panel = new AssistantPanel(this);
 
     public AssistantWizardPage(NewWizardTypes type) {
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
