@@ -6,6 +6,7 @@
 package tech.adrianohrl.identistry.view.wizards.pages;
 
 import java.awt.FlowLayout;
+import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.exceptions.iDentistryException;
@@ -20,16 +21,17 @@ public class LoggableWizardPage extends AbstractWizardPage {
     
     private static final Logger logger = Logger.getLogger(LoggableWizardPage.class);
     private final AbstractWizardPage nextPage;
-    private final LoggablePanel panel = new LoggablePanel(this);
+    private final LoggablePanel panel;
 
-    public LoggableWizardPage(NewWizardTypes type) {
+    public LoggableWizardPage(NewWizardTypes type, EntityManager em) {
+        this.panel = new LoggablePanel(this, em);
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
         switch (type) {
             case NEW_ASSISTANT:
-                nextPage = new AssistantWizardPage(type);
+                nextPage = new AssistantWizardPage(type, em);
                 break;
             case NEW_DENTIST:
-                nextPage = new DentistWizardPanel(type);
+                nextPage = new DentistWizardPanel(type, em);
                 break;
             default:
                 throw new iDentistryException("Invalid wizard page request for LoggableWizardPage: " + type);

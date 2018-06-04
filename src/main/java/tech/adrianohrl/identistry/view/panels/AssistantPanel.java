@@ -6,25 +6,30 @@
 package tech.adrianohrl.identistry.view.panels;
 
 import java.awt.Component;
+import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
+import tech.adrianohrl.identistry.control.dao.individuals.AssistantDAO;
 
 /**
  *
  * @author adrianohrl
  */
-public class AssistantPanel extends javax.swing.JPanel implements WizardPagePanel {
+public class AssistantPanel extends AbstractWizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(AssistantPanel.class);
-    private final AbstractWizardPage parent;
+    private final AssistantDAO dao;
 
     /**
      * Creates new form AssistantPanel
      * @param parent
+     * @param em
      */
-    public AssistantPanel(AbstractWizardPage parent) {
-        this.parent = parent;
+    public AssistantPanel(AbstractWizardPage parent, EntityManager em) {
+        super(parent, em);
+        this.dao = new AssistantDAO(em);
         initComponents();
+        setMandatoryFieldsListeners();
     }
     
     @Override
@@ -40,6 +45,11 @@ public class AssistantPanel extends javax.swing.JPanel implements WizardPagePane
     @Override
     public void setLastFocusableComponent(Component component) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void setMandatoryFieldsListeners() {
+        
     }
 
     /**

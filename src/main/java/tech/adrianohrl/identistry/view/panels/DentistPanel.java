@@ -6,25 +6,30 @@
 package tech.adrianohrl.identistry.view.panels;
 
 import java.awt.Component;
+import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
+import tech.adrianohrl.identistry.control.dao.individuals.DentistDAO;
 
 /**
  *
  * @author adrianohrl
  */
-public class DentistPanel extends javax.swing.JPanel implements WizardPagePanel {
+public class DentistPanel extends AbstractWizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(DentistPanel.class);
-    private final AbstractWizardPage parent;
+    private final DentistDAO dao;
 
     /**
      * Creates new form DentistPanel
      * @param parent
+     * @param em
      */
-    public DentistPanel(AbstractWizardPage parent) {
-        this.parent = parent;
+    public DentistPanel(AbstractWizardPage parent, EntityManager em) {
+        super(parent, em);
+        this.dao = new DentistDAO(em);
         initComponents();
+        setMandatoryFieldsListeners();
     }
 
     @Override
@@ -40,6 +45,11 @@ public class DentistPanel extends javax.swing.JPanel implements WizardPagePanel 
     @Override
     public void setLastFocusableComponent(Component component) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void setMandatoryFieldsListeners() {
+        
     }
 
     /**

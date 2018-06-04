@@ -13,6 +13,7 @@ import java.awt.Toolkit;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
+import javax.persistence.EntityManager;
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -22,8 +23,9 @@ import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.Wizard;
 import se.gustavkarlsson.gwiz.WizardController;
+import tech.adrianohrl.dao.DataSource;
 import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
-import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
+import tech.adrianohrl.identistry.view.wizards.pages.LoggableWizardPage;
 
 /**
  *
@@ -268,21 +270,15 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.error(ex);
         }
-        NewWizardTypes type = NewWizardTypes.NEW_PATIENT;
+        NewWizardTypes type = NewWizardTypes.NEW_ASSISTANT;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
         wizard.setVisible(true);
-        PersonWizardPage page = new PersonWizardPage(type);
+        EntityManager em = DataSource.createEntityManager();
+        LoggableWizardPage page = new LoggableWizardPage(type, em);
         controller.startWizard(page);
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                WizardFrame wizard = new WizardFrame();
-                WizardController controller = new WizardController(wizard);
-                wizard.setVisible(true);
-                PersonWizardPage page = new PersonWizardPage();
-                controller.startWizard(page);
-            }
-        });*/
+        //em.close();
+        //DataSource.closeEntityManagerFactory();
     }
     
 }

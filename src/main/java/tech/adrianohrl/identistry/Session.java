@@ -25,14 +25,14 @@ import tech.adrianohrl.util.CalendarFormat;
  */
 public class Session implements ActionListener {
     
-    private final EntityManager em = DataSource.createEntityManager();;
+    private static final Logger logger = Logger.getLogger(Session.class);
+    private final EntityManager em = DataSource.createEntityManager();
     private final LoggableDAO userDAO = new LoggableDAO(em);
     private Loggable loggedUser = null;
     private Calendar start = null;
     private double duration = 0.0;
     private Calendar deadline = null;
-    private Timer timer = new Timer(1000, this);;
-    private static final Logger logger = Logger.getLogger(Session.class);
+    private Timer timer = new Timer(1000, this);
     protected EventListenerList listeners = new EventListenerList();
 
     public Session() throws DataSourceException {

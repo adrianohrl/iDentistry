@@ -6,11 +6,13 @@
 package tech.adrianohrl.identistry.view;
 
 import java.util.EventListener;
+import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
 import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.WizardController;
+import tech.adrianohrl.dao.DataSource;
 import tech.adrianohrl.dao.DataSourceException;
 import tech.adrianohrl.identistry.view.dialogs.LoginDialog;
 import tech.adrianohrl.identistry.SessionEvent;
@@ -25,8 +27,9 @@ import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
  */
 public class iDentistry extends javax.swing.JFrame implements EventListener {
     
-    private LoginDialog loginDialog = null;
     private final static Logger logger = Logger.getLogger(iDentistry.class);
+    private final EntityManager em = DataSource.createEntityManager();
+    private LoginDialog loginDialog;
 
     /**
      * Creates new form iDentistry
@@ -124,11 +127,6 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("iDentistry");
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-        });
 
         searchLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         searchLabel.setIcon(IconFontSwing.buildIcon(FontAwesome.SEARCH, 15));
@@ -140,6 +138,9 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         searchTextField.setBackground(new java.awt.Color(51, 51, 51));
         searchTextField.setText("Search... (Ctrl+F)");
         searchTextField.setToolTipText("");
+        searchTextField.setMaximumSize(new java.awt.Dimension(150, 25));
+        searchTextField.setMinimumSize(new java.awt.Dimension(150, 25));
+        searchTextField.setPreferredSize(new java.awt.Dimension(150, 25));
 
         sessionUserLabel.setText("User:");
 
@@ -299,7 +300,7 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         NewWizardTypes type = NewWizardTypes.NEW_PATIENT;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(type);
+        PersonWizardPage page = new PersonWizardPage(type, em);
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_patientMenuItemActionPerformed
@@ -308,7 +309,7 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         NewWizardTypes type = NewWizardTypes.NEW_ASSISTANT;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(type);
+        PersonWizardPage page = new PersonWizardPage(type, em);
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_assistantMenuItemActionPerformed
@@ -317,7 +318,7 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         NewWizardTypes type = NewWizardTypes.NEW_DENTIST;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(type);
+        PersonWizardPage page = new PersonWizardPage(type, em);
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_dentistMenuItemActionPerformed
@@ -333,10 +334,6 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     private void sessionLogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sessionLogoutButtonActionPerformed
         loginDialog.logout();
     }//GEN-LAST:event_sessionLogoutButtonActionPerformed
-
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        System.out.println("[iDentistry] formKeyPressed : " + evt.paramString());
-    }//GEN-LAST:event_formKeyPressed
 
     /**
      * @param args the command line arguments

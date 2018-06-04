@@ -8,6 +8,7 @@ package tech.adrianohrl.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -42,6 +43,20 @@ public class PropertyUtil {
         URL url = classLoader.getResource(path);
         System.out.println("url path: " + url);
         return url != null ? url.getFile() : "";
+    }
+    
+    public static double getLowPasswordEntropyThreshold() {
+        return Double.parseDouble(PropertyUtil.getProperty("general.config.password.entropy.threshold.low"));
+    }
+    
+    public static double getHighPasswordEntropyThreshold() {
+        return Double.parseDouble(PropertyUtil.getProperty("general.config.password.entropy.threshold.high"));
+    }
+    
+    public static Locale getDefaultLocale() {
+        String language = PropertyUtil.getProperty("general.config.locale.language");
+        String country = PropertyUtil.getProperty("general.config.locale.country");
+        return new Locale(language, country);
     }
     
     public static String getProperty(String property) {

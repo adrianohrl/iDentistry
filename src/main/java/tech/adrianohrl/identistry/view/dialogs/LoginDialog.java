@@ -230,7 +230,7 @@ public class LoginDialog extends javax.swing.JDialog {
         );
 
         logoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo/64x64.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo/64x64.png"))); // NOI18N
         logoLabel.setToolTipText("iDentistry by AdrianoHRL.");
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);

@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.Date;
+import javax.persistence.EntityManager;
 import javax.swing.ButtonModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -20,6 +21,7 @@ import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
+import tech.adrianohrl.identistry.control.dao.individuals.PersonDAO;
 import tech.adrianohrl.identistry.model.individuals.Address;
 import tech.adrianohrl.identistry.model.individuals.AddressUtil;
 import tech.adrianohrl.identistry.model.individuals.Genders;
@@ -29,18 +31,19 @@ import tech.adrianohrl.identistry.view.components.ImageUtil;
  *
  * @author adrianohrl
  */
-public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
+public class PersonPanel extends AbstractWizardPagePanel {
     
-    private static final Logger logger = Logger.getLogger(PersonPanel.class);
-    private final TextFieldChangeListener listener = new TextFieldChangeListener();
-    private final AbstractWizardPage parent;
+    private static final Logger logger = Logger.getLogger(PersonPanel.class);    
+    private final PersonDAO dao;
 
     /**
      * Creates new form NewPersonPanel
      * @param parent
+     * @param em
      */
-    public PersonPanel(AbstractWizardPage parent) {
-        this.parent = parent;
+    public PersonPanel(AbstractWizardPage parent, EntityManager em) {
+        super(parent, em);
+        this.dao = new PersonDAO(em);
         initComponents();
         setMandatoryFieldsListeners();
     }
@@ -216,7 +219,8 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         parent.updateWizardButtons();
     }
 
-    private void setMandatoryFieldsListeners() {
+    @Override
+    protected void setMandatoryFieldsListeners() {
         listener.assignToListenerList(nameTextField);
         listener.assignToListenerList(dobFormattedTextField);
         listener.assignToListenerList(phoneFormattedTextField);
@@ -224,29 +228,6 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
         listener.assignToListenerList(streetTextField);
         listener.assignToListenerList(numberFormattedTextField);
         listener.assignToListenerList(areaTextField);
-    }
-    
-    private class TextFieldChangeListener implements DocumentListener {
-        
-        public void assignToListenerList(JTextField field) {
-            field.getDocument().addDocumentListener(listener);
-        }
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            parent.updateWizardButtons();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            parent.updateWizardButtons();
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            parent.updateWizardButtons();
-        }
-        
     }
 
     /**
@@ -740,7 +721,7 @@ public class PersonPanel extends javax.swing.JPanel implements WizardPagePanel {
 
         instagramTextField.setNextFocusableComponent(pictureLabel);
 
-        emailLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.FACEBOOK_OFFICIAL, 20));
+        emailLabelIcon.setIcon(IconFontSwing.buildIcon(FontAwesome.AT, 20));
         emailLabelIcon.setLabelFor(facebookTextField);
         emailLabelIcon.setFocusable(false);
         emailLabelIcon.setMaximumSize(new java.awt.Dimension(21, 21));

@@ -6,6 +6,7 @@
 package tech.adrianohrl.identistry.view.wizards.pages;
 
 import java.awt.FlowLayout;
+import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.exceptions.iDentistryException;
@@ -20,9 +21,10 @@ public class DentistWizardPanel extends AbstractWizardPage {
     
     private static final Logger logger = Logger.getLogger(DentistWizardPanel.class);
     private final AbstractWizardPage nextPage = null;
-    private final DentistPanel panel = new DentistPanel(this);
+    private final DentistPanel panel;
 
-    public DentistWizardPanel(NewWizardTypes type) {
+    public DentistWizardPanel(NewWizardTypes type, EntityManager em) {
+        this.panel = new DentistPanel(this, em);
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
         if (!type.isNewDentist()) {
             throw new iDentistryException("Invalid wizard page request for DentistWizardPage: " + type);

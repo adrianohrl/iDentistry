@@ -863,7 +863,7 @@
         <Component class="javax.swing.JLabel" name="emailLabelIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="IconFontSwing.buildIcon(FontAwesome.FACEBOOK_OFFICIAL, 20)" type="code"/>
+              <Connection code="IconFontSwing.buildIcon(FontAwesome.AT, 20)" type="code"/>
             </Property>
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="facebookTextField"/>
