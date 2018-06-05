@@ -5,11 +5,17 @@
  */
 package tech.adrianohrl.identistry.view.panels;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import jiconfont.icons.FontAwesome;
@@ -52,8 +58,8 @@ public class LoggablePanel extends AbstractWizardPagePanel {
         this.dao = new LoggableDAO(em);
         this.loggable = loggable;
         initComponents();
-        setMandatoryFieldsListeners();
-        fill();
+        setListeners();
+        load();
         configureNbvcxz();
         strengthFactor = 100 / 3 / (HIGH_ENTROPY - LOW_ENTROPY);
     }
@@ -103,8 +109,7 @@ public class LoggablePanel extends AbstractWizardPagePanel {
         String password = new String(passwordField.getPassword());
         Result result = nbvcxz.estimate(password);
         Double strength = strengthFactor * result.getEntropy();
-        strengthProgressBar.setValue(strength.intValue());  
-        confirmPasswordField.setEnabled(result.isMinimumEntropyMet());        
+        strengthProgressBar.setValue(strength.intValue());      
     }
     
     private void configureNbvcxz() {
@@ -131,7 +136,7 @@ public class LoggablePanel extends AbstractWizardPagePanel {
         confirmPasswordCheckLabel.setIcon(icon);
     }
 
-    private void setMandatoryFieldsListeners() {
+    private void setListeners() {
         listener.assignToListenerList(usernameTextField);
         usernameTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -149,6 +154,23 @@ public class LoggablePanel extends AbstractWizardPagePanel {
                 validateUsername();
             }
         });
+        usernameTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                loggable.setUsername(str);
+                logger.trace("Changed loggable's " + "username: " + loggable.getUsername());
+                System.out.println("Changed loggable's " + "username: " + loggable.getUsername());
+            }
+
+            @Override
+            public void focusGained(FocusEvent evt) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt) {
+                JTextField textField = (JTextField) evt.getSource();
+                update(textField.getText());
+            }
+        });
         listener.assignToListenerList(passwordField);
         passwordField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -164,6 +186,35 @@ public class LoggablePanel extends AbstractWizardPagePanel {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 calculatePasswordStrength();
+            }
+        });
+        passwordField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                loggable.setPassword(str);
+                logger.trace("Changed loggable's " + "password: " + loggable.getPassword());
+                System.out.println("Changed loggable's " + "password: " + loggable.getPassword());
+            }
+
+            @Override
+            public void focusGained(FocusEvent evt) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt) {
+                JPasswordField passwordField = (JPasswordField) evt.getSource();
+                Argon2 argon2 = Argon2Factory.create();
+                String hash = "";
+                try {
+                    hash = argon2.hash(2, 65536, 1, passwordField.getPassword());
+                    Result result = nbvcxz.estimate(new String(passwordField.getPassword()));
+                    confirmPasswordField.setEnabled(result.isMinimumEntropyMet());    
+                } catch (RuntimeException e) {
+                    logger.error("Error while encripting the password ...");
+                    return;
+                } finally {
+                    argon2.wipeArray(passwordField.getPassword());
+                }
+                update(hash);
             }
         });
         listener.assignToListenerList(confirmPasswordField);
@@ -185,8 +236,10 @@ public class LoggablePanel extends AbstractWizardPagePanel {
         });
     }
     
-    private void fill() {
-        
+    private void load() {
+        usernameTextField.setText(loggable.getUsername());
+        passwordField.setText("");
+        confirmPasswordField.setText("");
     }
 
     /**
@@ -316,7 +369,6 @@ public class LoggablePanel extends AbstractWizardPagePanel {
 
         strengthProgressBar.setForeground(new java.awt.Color(0, 0, 255));
         strengthProgressBar.setToolTipText("The password strength.");
-        strengthProgressBar.setValue(10);
         strengthProgressBar.setFocusable(false);
         strengthProgressBar.setMaximumSize(new java.awt.Dimension(150, 14));
         strengthProgressBar.setMinimumSize(new java.awt.Dimension(150, 14));

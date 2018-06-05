@@ -25,6 +25,7 @@ public class LoggableWizardPage extends AbstractWizardPage {
     private static final Logger logger = Logger.getLogger(LoggableWizardPage.class);
     private final AbstractWizardPage nextPage;
     private final LoggablePanel panel;
+    private final NewWizardTypes type;
     private final Loggable loggable;
 
     /**
@@ -34,6 +35,7 @@ public class LoggableWizardPage extends AbstractWizardPage {
      * @param loggable
      */
     public LoggableWizardPage(NewWizardTypes type, EntityManager em, Loggable loggable) {
+        this.type = type;
         this.loggable = loggable;
         this.panel = new LoggablePanel(this, em, loggable);
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
@@ -42,7 +44,8 @@ public class LoggableWizardPage extends AbstractWizardPage {
                 if (!(loggable instanceof Assistant)) {
                     throw new iDentistryException("The given loggable object must be an instance of the Assistant class in order to build an Assistant object.");
                 }
-                nextPage = new AssistantWizardPage(type, em, (Assistant) loggable);
+                //nextPage = new AssistantWizardPage(type, em, (Assistant) loggable);
+                nextPage = null;
                 break;
             case NEW_DENTIST:
                 if (!(loggable instanceof Dentist)) {
@@ -74,12 +77,12 @@ public class LoggableWizardPage extends AbstractWizardPage {
 
     @Override
     protected boolean isNextAllowed() {
-        return panel.isFilled();
+        return type.isNewDentist() && panel.isFilled();
     }
 
     @Override
     protected boolean isFinishAllowed() {
-        return false;
+        return type.isNewAssistant() && panel.isFilled();
     }
     
 }
