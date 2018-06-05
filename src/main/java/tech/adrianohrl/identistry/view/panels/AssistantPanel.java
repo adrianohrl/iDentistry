@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.control.dao.individuals.AssistantDAO;
+import tech.adrianohrl.identistry.model.individuals.Assistant;
 
 /**
  *
@@ -19,17 +20,21 @@ public class AssistantPanel extends AbstractWizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(AssistantPanel.class);
     private final AssistantDAO dao;
+    private final Assistant assistant;
 
     /**
      * Creates new form AssistantPanel
      * @param parent
      * @param em
+     * @param assistant
      */
-    public AssistantPanel(AbstractWizardPage parent, EntityManager em) {
+    public AssistantPanel(AbstractWizardPage parent, EntityManager em, Assistant assistant) {
         super(parent, em);
         this.dao = new AssistantDAO(em);
+        this.assistant = assistant;
         initComponents();
         setMandatoryFieldsListeners();
+        fill();
     }
     
     @Override
@@ -47,8 +52,11 @@ public class AssistantPanel extends AbstractWizardPagePanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    protected void setMandatoryFieldsListeners() {
+    private void setMandatoryFieldsListeners() {
+        
+    }
+    
+    private void fill() {
         
     }
 

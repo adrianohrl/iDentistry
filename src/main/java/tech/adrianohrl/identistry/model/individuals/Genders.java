@@ -31,4 +31,17 @@ public enum Genders {
         return null;
     }
     
+    public boolean isFemale() {
+        return this == FEMALE;
+    }
+    
+    public boolean isMale() {
+        return this == MALE;
+    }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
+    
 }

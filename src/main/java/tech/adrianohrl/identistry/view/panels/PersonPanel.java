@@ -6,14 +6,24 @@
 package tech.adrianohrl.identistry.view.panels;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 import javax.swing.ButtonModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -25,7 +35,9 @@ import tech.adrianohrl.identistry.control.dao.individuals.PersonDAO;
 import tech.adrianohrl.identistry.model.individuals.Address;
 import tech.adrianohrl.identistry.model.individuals.AddressUtil;
 import tech.adrianohrl.identistry.model.individuals.Genders;
+import tech.adrianohrl.identistry.model.individuals.Person;
 import tech.adrianohrl.identistry.view.components.ImageUtil;
+import tech.adrianohrl.util.CalendarFormat;
 
 /**
  *
@@ -35,17 +47,21 @@ public class PersonPanel extends AbstractWizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(PersonPanel.class);    
     private final PersonDAO dao;
+    private final Person person;
 
     /**
      * Creates new form NewPersonPanel
      * @param parent
      * @param em
+     * @param person
      */
-    public PersonPanel(AbstractWizardPage parent, EntityManager em) {
+    public PersonPanel(AbstractWizardPage parent, EntityManager em, Person person) {
         super(parent, em);
         this.dao = new PersonDAO(em);
+        this.person = person;
         initComponents();
-        setMandatoryFieldsListeners();
+        load();
+        setListeners();
     }
     
     public String getPersonName() {
@@ -163,14 +179,13 @@ public class PersonPanel extends AbstractWizardPagePanel {
             
     @Override
     public boolean isFilled() {
-        System.out.println("picture: " + getPersonProfilePicture());
         return !getPersonName().isEmpty() 
             && getPersonGender() != null
             && getPersonDayOfBirth() != null
             && !getPersonPhone().isEmpty()
             && !getPersonRG().isEmpty()
-            && isAddressFilled()
-            && !getPersonProfilePicture().isEmpty();
+            && isAddressFilled();
+            //&& !getPersonProfilePicture().isEmpty();
     }
 
     @Override
@@ -219,8 +234,261 @@ public class PersonPanel extends AbstractWizardPagePanel {
         parent.updateWizardButtons();
     }
 
-    @Override
-    protected void setMandatoryFieldsListeners() {
+    private void setListeners() {
+        nameTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.setName(str);
+                logger.trace("Changed person's " + "name: " + person.getName());
+                System.out.println("Changed person's " + "name: " + person.getName());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        pictureLabel.addPropertyChangeListener("icon", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                ImageIcon icon = (ImageIcon) evt.getNewValue();
+                person.setPicture(icon != null ? icon.getDescription() : "");
+                logger.trace("Changed person's " + "picture: " + person.getPicture());
+                System.out.println("Changed person's " + "picture: " + person.getPicture());
+            }
+        });
+        genderFemaleRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JRadioButton radioButton = (JRadioButton) evt.getSource();
+                person.setGender(radioButton.isSelected() ? Genders.FEMALE : Genders.MALE);
+                logger.trace("Changed person's " + "gender: " + person.getGender());
+                System.out.println("Changed person's " + "gender: " + person.getGender());
+            }
+        });
+        genderMaleRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JRadioButton radioButton = (JRadioButton) evt.getSource();
+                person.setGender(radioButton.isSelected() ? Genders.MALE : Genders.FEMALE);
+                logger.trace("Changed person's " + "gender: " + person.getGender());
+                System.out.println("Changed person's " + "gender: " + person.getGender());
+            }
+        });
+        dobFormattedTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime((Date) evt.getNewValue());
+                person.setDob(calendar);
+                logger.trace("Changed person's " + "day-of-birth: " + CalendarFormat.formatDate(person.getDob()));
+                System.out.println("Changed person's " + "day-of-birth: " + CalendarFormat.formatDate(person.getDob()));
+            }
+        });
+        phoneFormattedTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                person.setPhone((String) evt.getNewValue());
+                logger.trace("Changed person's " + "phone: " + person.getPhone());
+                System.out.println("Changed person's " + "phone: " + person.getPhone());
+            }
+        });
+        whatsappCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                JCheckBox checkBox = (JCheckBox) evt.getSource();
+                person.setWhatsapp(checkBox.isSelected());
+                logger.trace("Changed person's " + "whatsapp: " + (person.isWhatsapp() ? "YES" : "NO"));
+                System.out.println("Changed person's " + "whatsapp: " + (person.isWhatsapp() ? "YES" : "NO"));
+            }
+        });
+        cpfFormattedTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                person.setCpf((String) evt.getNewValue());
+                logger.trace("Changed person's " + "cpf: " + person.getCpf());
+                System.out.println("Changed person's " + "cpf: " + person.getCpf());
+            }
+        });
+        rgTextField.addPropertyChangeListener("text", (PropertyChangeEvent evt) -> {
+            person.setRg((String) evt.getNewValue());
+            logger.trace("Changed person's " + "rg: " + person.getRg());
+            System.out.println("Changed person's " + "rg: " + person.getRg());
+        });
+        occupationTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.setOccupation(str);
+                logger.trace("Changed person's " + "occupation: " + person.getOccupation());
+                System.out.println("Changed person's " + "occupation: " + person.getOccupation());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        streetTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.getAddress().setStreet(str);
+                logger.trace("Changed person's address " + "street: " + person.getAddress().getStreet());
+                System.out.println("Changed person's address " + "street: " + person.getAddress().getStreet());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        numberFormattedTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                Long number = (Long) evt.getNewValue();
+                person.getAddress().setNumber(number.intValue());
+                logger.trace("Changed person's address " + "number: " + person.getAddress().getNumber());
+                System.out.println("Changed person's address " + "number: " + person.getAddress().getNumber());
+            }
+        });
+        obsTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.getAddress().setObs(str);
+                logger.trace("Changed person's address " + "obs: " + person.getAddress().getObs());
+                System.out.println("Changed person's address " + "obs: " + person.getAddress().getObs());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        areaTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.getAddress().setArea(str);
+                logger.trace("Changed person's address " + "area: " + person.getAddress().getArea());
+                System.out.println("Changed person's address " + "area: " + person.getAddress().getArea());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        zipFormattedTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                person.getAddress().setZip((String) evt.getNewValue());
+                logger.trace("Changed person's address " + "zip: " + person.getAddress().getZip());
+                System.out.println("Changed person's address " + "zip: " + person.getAddress().getZip());
+            }
+        });
+        stateComboBox.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.getAddress().setUf(str);
+                logger.trace("Changed person's address " + "state: " + person.getAddress().getUf());
+                System.out.println("Changed person's address " + "state: " + person.getAddress().getUf());
+            }
+
+            @Override
+            public void focusGained(FocusEvent evt) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt) {
+                JComboBox comboBox = (JComboBox) evt.getSource();
+                update((String) comboBox.getSelectedItem());
+            }
+        });
+        cityComboBox.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.getAddress().setCity(str);
+                logger.trace("Changed person's address " + "city: " + person.getAddress().getCity());
+                System.out.println("Changed person's address " + "city: " + person.getAddress().getCity());
+            }
+
+            @Override
+            public void focusGained(FocusEvent evt) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt) {
+                JComboBox comboBox = (JComboBox) evt.getSource();
+                update((String) comboBox.getSelectedItem());
+            }
+        });
+        emailTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.setEmail(str);
+                logger.trace("Changed person's " + "email: " + person.getEmail());
+                System.out.println("Changed person's " + "email: " + person.getEmail());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        facebookTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.setFacebook(str);
+                logger.trace("Changed person's " + "facebook: " + person.getFacebook());
+                System.out.println("Changed person's " + "facebook: " + person.getFacebook());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
+        instagramTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.setInstagram(str);
+                logger.trace("Changed person's " + "instagram: " + person.getInstagram());
+                System.out.println("Changed person's " + "instagram: " + person.getInstagram());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
+        });
         listener.assignToListenerList(nameTextField);
         listener.assignToListenerList(dobFormattedTextField);
         listener.assignToListenerList(phoneFormattedTextField);
@@ -228,6 +496,38 @@ public class PersonPanel extends AbstractWizardPagePanel {
         listener.assignToListenerList(streetTextField);
         listener.assignToListenerList(numberFormattedTextField);
         listener.assignToListenerList(areaTextField);
+    }
+    
+    private void load() {
+        nameTextField.setText(person.getName());
+        pictureLabel.setIcon(ImageUtil.getProfilePicture(person.getPicture()));
+        Genders gender = person.getGender();
+        genderFemaleRadioButton.setSelected(gender != null && gender.isFemale());
+        genderMaleRadioButton.setSelected(gender != null && gender.isMale());
+        dobFormattedTextField.setText(CalendarFormat.formatDate(person.getDob()));
+        phoneFormattedTextField.setText(person.getPhone());
+        whatsappCheckBox.setSelected(person.isWhatsapp());
+        cpfFormattedTextField.setText(person.getCpf());
+        rgTextField.setText(person.getRg());
+        occupationTextField.setText(person.getOccupation());
+        Address address = person.getAddress();
+        if (address == null) {
+            address = new Address();
+            person.setAddress(address);
+        }
+        streetTextField.setText(address.getStreet());
+        numberFormattedTextField.setText(address.getNumber() + "");
+        obsTextField.setText(address.getObs());
+        areaTextField.setText(address.getArea());
+        zipFormattedTextField.setText(address.getZip());
+        stateComboBox.setSelectedItem(address.getUf());
+        if (address.getUf() != null && !address.getUf().isEmpty()) {
+            cityComboBox.setSelectedItem(address.getCity());
+            cityComboBox.setEnabled(true);
+        }
+        emailTextField.setText(person.getEmail());
+        facebookTextField.setText(person.getFacebook());
+        instagramTextField.setText(person.getInstagram());
     }
 
     /**
@@ -553,7 +853,7 @@ public class PersonPanel extends AbstractWizardPagePanel {
 
         cityComboBox.setToolTipText("Enter the city name.");
         cityComboBox.setEnabled(false);
-        cityComboBox.setNextFocusableComponent(facebookTextField);
+        cityComboBox.setNextFocusableComponent(emailTextField);
         cityComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cityComboBoxActionPerformed(evt);
@@ -731,7 +1031,7 @@ public class PersonPanel extends AbstractWizardPagePanel {
         emailLabel.setText(":");
         emailLabel.setFocusable(false);
 
-        emailTextField.setNextFocusableComponent(instagramTextField);
+        emailTextField.setNextFocusableComponent(facebookTextField);
 
         javax.swing.GroupLayout socialNetworksPanelLayout = new javax.swing.GroupLayout(socialNetworksPanel);
         socialNetworksPanel.setLayout(socialNetworksPanelLayout);
@@ -815,7 +1115,7 @@ public class PersonPanel extends AbstractWizardPagePanel {
                 .addComponent(addressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(socialNetworksPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {personPanel, picturePanel});

@@ -24,8 +24,10 @@ import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.Wizard;
 import se.gustavkarlsson.gwiz.WizardController;
 import tech.adrianohrl.dao.DataSource;
+import tech.adrianohrl.identistry.model.individuals.Assistant;
 import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
 import tech.adrianohrl.identistry.view.wizards.pages.LoggableWizardPage;
+import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
 
 /**
  *
@@ -275,7 +277,9 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         WizardController controller = new WizardController(wizard);
         wizard.setVisible(true);
         EntityManager em = DataSource.createEntityManager();
-        LoggableWizardPage page = new LoggableWizardPage(type, em);
+        //LoggableWizardPage page = new LoggableWizardPage(type, em);
+        Assistant assistant = new Assistant();
+        PersonWizardPage page = new PersonWizardPage(type, em, assistant);
         controller.startWizard(page);
         //em.close();
         //DataSource.closeEntityManagerFactory();

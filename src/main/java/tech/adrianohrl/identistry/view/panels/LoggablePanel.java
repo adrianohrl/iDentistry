@@ -23,6 +23,7 @@ import me.gosimple.nbvcxz.scoring.Result;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.control.dao.individuals.LoggableDAO;
+import tech.adrianohrl.identistry.model.individuals.Loggable;
 import tech.adrianohrl.util.PropertyUtil;
 
 /**
@@ -37,18 +38,22 @@ public class LoggablePanel extends AbstractWizardPagePanel {
     private final double LOW_ENTROPY = PropertyUtil.getLowPasswordEntropyThreshold();
     private final double HIGH_ENTROPY = PropertyUtil.getHighPasswordEntropyThreshold();
     private final double strengthFactor;
+    private final Loggable loggable;
 
     /**
      * Creates new form LoggablePanel
      *
      * @param parent
      * @param em
+     * @param loggable
      */
-    public LoggablePanel(AbstractWizardPage parent, EntityManager em) {
+    public LoggablePanel(AbstractWizardPage parent, EntityManager em, Loggable loggable) {
         super(parent, em);
         this.dao = new LoggableDAO(em);
+        this.loggable = loggable;
         initComponents();
         setMandatoryFieldsListeners();
+        fill();
         configureNbvcxz();
         strengthFactor = 100 / 3 / (HIGH_ENTROPY - LOW_ENTROPY);
     }
@@ -126,8 +131,7 @@ public class LoggablePanel extends AbstractWizardPagePanel {
         confirmPasswordCheckLabel.setIcon(icon);
     }
 
-    @Override
-    protected void setMandatoryFieldsListeners() {
+    private void setMandatoryFieldsListeners() {
         listener.assignToListenerList(usernameTextField);
         usernameTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -179,6 +183,10 @@ public class LoggablePanel extends AbstractWizardPagePanel {
                 validatePasswords();
             }
         });
+    }
+    
+    private void fill() {
+        
     }
 
     /**

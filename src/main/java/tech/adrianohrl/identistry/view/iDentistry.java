@@ -17,6 +17,9 @@ import tech.adrianohrl.dao.DataSourceException;
 import tech.adrianohrl.identistry.view.dialogs.LoginDialog;
 import tech.adrianohrl.identistry.SessionEvent;
 import tech.adrianohrl.identistry.SessionEventListener;
+import tech.adrianohrl.identistry.model.individuals.Assistant;
+import tech.adrianohrl.identistry.model.individuals.Dentist;
+import tech.adrianohrl.identistry.model.individuals.Patient;
 import tech.adrianohrl.identistry.view.frames.WizardFrame;
 import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
 import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
@@ -300,7 +303,8 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         NewWizardTypes type = NewWizardTypes.NEW_PATIENT;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(type, em);
+        Patient patient = new Patient();
+        PersonWizardPage page = new PersonWizardPage(type, em, patient);
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_patientMenuItemActionPerformed
@@ -309,7 +313,8 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         NewWizardTypes type = NewWizardTypes.NEW_ASSISTANT;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(type, em);
+        Assistant assistant = new Assistant();
+        PersonWizardPage page = new PersonWizardPage(type, em, assistant);
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_assistantMenuItemActionPerformed
@@ -318,7 +323,8 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
         NewWizardTypes type = NewWizardTypes.NEW_DENTIST;
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(type, em);
+        Dentist dentist = new Dentist();
+        PersonWizardPage page = new PersonWizardPage(type, em, dentist);
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_dentistMenuItemActionPerformed

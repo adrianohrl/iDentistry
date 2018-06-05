@@ -16,34 +16,38 @@ import java.util.Date;
  */
 public class CalendarFormat {
     
+    private final static DateFormat dateOnlyFormatter = new SimpleDateFormat("dd/MM/yyyy");
     private final static DateFormat dateFormatter = new SimpleDateFormat("d MMM yyyy");
     private final static DateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
     
     public static String formatDate(Date date) {
-        return dateFormatter.format(date);
+        return date != null ? dateOnlyFormatter.format(date) : "";
     }
     
     public static String formatDate(Calendar date) {
-        return CalendarFormat.formatDate(date.getTime());
+        return date != null ? CalendarFormat.formatDate(date.getTime()) : "";
     }
     
     public static String formatTime(Date time) {
-        return timeFormatter.format(time);
+        return time != null ? timeFormatter.format(time) : "";
     }
     
     public static String formatTime(Calendar time) {
-        return CalendarFormat.formatTime(time.getTime());
+        return time != null ? CalendarFormat.formatTime(time.getTime()) : "";
     }
     
     public static String format(Date calendar) {
-        return CalendarFormat.format(calendar, " at ", true);
+        return calendar != null ? CalendarFormat.format(calendar, " at ", true) : "";
     }
     
     public static String format(Calendar calendar) {
-        return CalendarFormat.format(calendar, " at ", true);
+        return calendar != null ? CalendarFormat.format(calendar, " at ", true) : "";
     }
     
     public static String format(Date calendar, String separator, boolean dateFirst) {
+        if (calendar == null) {
+            return "";
+        }
         if (dateFirst) {
             return dateFormatter.format(calendar) + separator + timeFormatter.format(calendar);
         }

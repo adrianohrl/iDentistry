@@ -49,6 +49,4 @@ public abstract class AbstractWizardPagePanel extends javax.swing.JPanel impleme
         
     }
     
-    protected abstract void setMandatoryFieldsListeners();
-    
 }

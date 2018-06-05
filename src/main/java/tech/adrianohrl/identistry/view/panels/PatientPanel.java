@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.control.dao.individuals.PatientDAO;
+import tech.adrianohrl.identistry.model.individuals.Patient;
 
 /**
  *
@@ -19,17 +20,21 @@ public class PatientPanel extends AbstractWizardPagePanel {
     
     private static final Logger logger = Logger.getLogger(PatientPanel.class);
     private final PatientDAO dao;
+    private final Patient patient;
 
     /**
      * Creates new form PatientPanel
      * @param parent
      * @param em
+     * @param patient
      */
-    public PatientPanel(AbstractWizardPage parent, EntityManager em) {
+    public PatientPanel(AbstractWizardPage parent, EntityManager em, Patient patient) {
         super(parent, em);
         this.dao = new PatientDAO(em);
+        this.patient = patient;
         initComponents();
         setMandatoryFieldsListeners();
+        fill();
     }
 
     @Override
@@ -47,8 +52,11 @@ public class PatientPanel extends AbstractWizardPagePanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    protected void setMandatoryFieldsListeners() {
+    private void setMandatoryFieldsListeners() {
+        
+    }
+    
+    private void fill() {
         
     }
 

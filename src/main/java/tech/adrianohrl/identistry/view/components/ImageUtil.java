@@ -82,6 +82,21 @@ public class ImageUtil {
         }
     }
     
+    public static ImageIcon getProfilePicture(String path) {
+        if (path == null || path.isEmpty()) {
+            return ImageUtil.getDefaultProfilePicture();
+        }
+        File file = new File(path);
+        try {
+            Image image = ImageIO.read(file);
+            logger.info("Opening " + file.getName() + ".");
+            return new ImageIcon(image, path);
+        } catch (IOException e) {
+            logger.error("Error while openning " + file.getName() + ".");
+            return ImageUtil.getDefaultProfilePicture();
+        }
+    }
+    
     public static void saveImageIcon(ImageIcon icon) {
         
     }
