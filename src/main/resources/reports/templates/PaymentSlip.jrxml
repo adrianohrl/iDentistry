@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="21" bottomMargin="21" uuid="6c83f349-5fd8-400f-82fc-e20a7e136dfa">
-	<property name="ireport.zoom" value="1.6105100000000203"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="235"/>
+	<property name="ireport.zoom" value="2.1435888100000304"/>
+	<property name="ireport.x" value="61"/>
+	<property name="ireport.y" value="1788"/>
 	<import value="tech.adrianohrl.identistry.model.*"/>
 	<import value="tech.adrianohrl.util.*"/>
 	<parameter name="CLINIC" class="tech.adrianohrl.identistry.model.individuals.Clinic"/>
@@ -21,7 +21,13 @@
 	<field name="amount" class="java.lang.Double"/>
 	<field name="obs" class="java.lang.String"/>
 	<title>
-		<band height="260" splitType="Stretch">
+		<band height="520" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="270" width="555" height="250" uuid="1ce79acf-3776-49f5-9234-b8f7b74b1282"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</rectangle>
 			<image>
 				<reportElement x="0" y="10" width="555" height="250" uuid="0a5af132-83a7-43e1-913a-4d159f5301b9"/>
 				<graphicElement>
@@ -106,6 +112,200 @@
 					<pen lineWidth="1.5" lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
+			<staticText>
+				<reportElement x="0" y="380" width="277" height="20" uuid="e7703414-bec8-42b1-8977-11ad90c0b5f0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph firstLineIndent="10"/>
+				</textElement>
+				<text><![CDATA[Forma de Pagamento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="353" y="430" width="75" height="15" uuid="974ce3a8-e348-4bb4-b7cd-f596837b584c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[CurrencyUtil.format($P{TOTAL_AMOUNT})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="430" width="75" height="15" uuid="b306e997-2630-47e1-80dd-ff8a62329310"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="415" width="75" height="15" uuid="2dd91aaa-a29e-4b88-a9df-53e6e293fae0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Parcelas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="278" y="505" width="277" height="15" uuid="f3de411e-b692-4b1b-998c-0929192185d4"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PATIENT}.getName()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="270" width="277" height="30" uuid="d6065633-20a7-43f5-bbf3-28fc5cab38d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Declaração]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="353" y="400" width="75" height="15" uuid="95ef4568-a726-4b88-8257-a917758704fc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[CurrencyUtil.format($P{INPUT_AMOUNT})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="400" width="75" height="15" uuid="11e36d93-2e7a-4976-bb8d-2b696480f5c6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[CurrencyUtil.format($P{INPUT_AMOUNT})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="445" width="277" height="30" uuid="16aa60ca-e5e9-4b65-bb34-5f21354c52a5"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="9"/>
+					<paragraph firstLineIndent="10" leftIndent="10" rightIndent="10"/>
+				</textElement>
+				<text><![CDATA[_____________, ___ de __________ de 20___]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="400" width="75" height="15" uuid="e749215f-6460-4685-9232-5290de572d5a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Entrada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="475" width="277" height="30" uuid="dc43122f-60bd-455c-aa13-376f0e732b9e"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="9"/>
+					<paragraph firstLineIndent="10" leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[_________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="400" width="75" height="15" uuid="7ec4cdc7-ddbd-453f-991b-f0aba008195c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Entrada:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="278" y="300" width="277" height="80" uuid="19072c45-30b1-4bf4-a1cf-5bbe6ac159f6"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+					<paragraph firstLineIndent="20" leftIndent="10" rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Eu, <b>" + $P{PATIENT}.getName() + "</b>, portador do RG <b>" + $P{PATIENT}.getRg() + "</b> e CPF <b>" + $P{PATIENT}.getCpf() + "</b>, me comprometo a seguir a forma de pagamento especificada abaixo à clínica <b>" + $P{CLINIC}.getName() + "</b> pela prestação do serviço <b>" + $P{SERVICE} + "</b>, estando sujeito a pagar as penalidades descritas no boleto em cada parcela atrasada."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="430" width="75" height="15" uuid="11429ac9-fda0-494d-bd77-99bffa4bacdd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="475" width="277" height="30" uuid="21fcac81-c9fb-4cae-96ed-f3485be96ac2"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="9"/>
+					<paragraph firstLineIndent="10" leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<text><![CDATA[_________________________________________]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="505" width="277" height="15" uuid="1ca6dec3-afe2-4793-93d0-c685427ebbab"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PATIENT}.getName()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="270" width="277" height="30" uuid="55fb2a67-77c5-466e-8ed8-31f19a857965"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Declaração]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="75" y="430" width="75" height="15" uuid="27f8c1aa-e617-4faa-adf7-f62326dd6985"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[CurrencyUtil.format($P{TOTAL_AMOUNT})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="277" y="270" width="1" height="250" uuid="5a4269c6-849e-4616-b69e-1ba5a672183e"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="278" y="415" width="75" height="15" uuid="6780e166-cf3e-407a-93fe-6f4498d9c09f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Parcelas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="300" width="277" height="80" uuid="239464ae-56e7-4d22-9527-28dada7f93ad"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+					<paragraph firstLineIndent="20" leftIndent="10" rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Eu, <b>" + $P{PATIENT}.getName() + "</b>, portador do RG <b>" + $P{PATIENT}.getRg() + "</b> e CPF <b>" + $P{PATIENT}.getCpf() + "</b>, me comprometo a seguir a forma de pagamento especificada abaixo à clínica <b>" + $P{CLINIC}.getName() + "</b> pela prestação do serviço <b>" + $P{SERVICE} + "</b>, estando sujeito a pagar as penalidades descritas no boleto em cada parcela atrasada."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="380" width="277" height="20" uuid="1460fb4a-47e9-4c66-b518-926dd07eb10c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph firstLineIndent="10"/>
+				</textElement>
+				<text><![CDATA[Forma de Pagamento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="445" width="277" height="30" uuid="c3509880-6a51-4aab-adc2-2f0872541107"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="9"/>
+					<paragraph firstLineIndent="10" leftIndent="10" rightIndent="10"/>
+				</textElement>
+				<text><![CDATA[_____________, ___ de __________ de 20___]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="75" y="415" width="75" height="15" uuid="4fdd4d5a-95f4-4d48-81be-b59650e168b6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL} + " x " + CurrencyUtil.format($P{INSTALLMENT_AMOUNT})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="265" width="555" height="1" uuid="67d9d893-b670-4b98-8a6c-86cade490a72"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="353" y="415" width="75" height="15" uuid="69b11cd6-712f-43ff-92f9-799d3fd27a1d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="true"/>
+					<paragraph firstLineIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL} + " x " + CurrencyUtil.format($P{INSTALLMENT_AMOUNT})]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -535,6 +735,7 @@
 	</detail>
 	<summary>
 		<band height="260">
+			<printWhenExpression><![CDATA[$P{INPUT_AMOUNT} != null && $P{INPUT_AMOUNT} > 0.0]]></printWhenExpression>
 			<rectangle>
 				<reportElement x="0" y="0" width="555" height="250" uuid="9673eb5f-ae78-43b8-89e8-c824aa004a00"/>
 				<graphicElement>
@@ -558,15 +759,15 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Declaração]]></text>
+				<text><![CDATA[Recibo]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="30" width="277" height="80" uuid="9933d47f-7a82-4cb4-9270-9ad4c82878c5"/>
+				<reportElement x="1" y="30" width="277" height="145" uuid="9933d47f-7a82-4cb4-9270-9ad4c82878c5"/>
 				<textElement textAlignment="Justified" markup="html">
 					<font size="9"/>
 					<paragraph firstLineIndent="20" leftIndent="10" rightIndent="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Eu, <b>" + $P{PATIENT}.getName() + "</b>, portador do RG <b>" + $P{PATIENT}.getRg() + "</b> e CPF <b>" + $P{PATIENT}.getCpf() + "</b>, me comprometo a seguir a forma de pagamento especificada abaixo à clínica <b>" + $P{CLINIC}.getName() + "</b> pela prestação do serviço <b>" + $P{SERVICE} + "</b>, estando sujeito a pagar as penalidades descritas no boleto em cada parcela atrasada."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["A clínica <b>" + $P{CLINIC}.getName() + "</b>, representada pelo Cirurgião Dentista <b>" + $P{DENTIST}.getName() + "</b>, portador do CRO <b>" + $P{DENTIST}.getCro($P{STATE}) + "</b> e CPF <b>" + $P{DENTIST}.getCpf() + "</b>, recebeu a quantia de <b>" + CurrencyUtil.format($P{INPUT_AMOUNT}) + "</b> de <b>" + $P{PATIENT}.getName() + "</b>, portador do CPF <b>" + $P{PATIENT}.getCpf() + "</b> referente à entrada do pagamento para a prestação do serviço <b>" + $P{SERVICE} + "</b>."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="175" width="277" height="30" uuid="5ad9cd12-8ead-4dc6-b845-5b43b58b98d6"/>
@@ -589,99 +790,8 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{PATIENT}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{DENTIST}.getName()]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="0" y="110" width="277" height="20" uuid="25b61341-9656-4343-a156-b321b7c02cf0"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-					<paragraph firstLineIndent="10"/>
-				</textElement>
-				<text><![CDATA[Forma de Pagamento:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="75" y="130" width="75" height="15" uuid="f45713e2-b6a5-465d-af7a-15506fe539ec"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="true"/>
-					<paragraph firstLineIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[CurrencyUtil.format($P{INPUT_AMOUNT})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="75" y="145" width="75" height="15" uuid="6487a55a-2ce4-404a-9cbb-626dc39e47dc"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="true"/>
-					<paragraph firstLineIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL} + " x " + CurrencyUtil.format($P{INSTALLMENT_AMOUNT})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="75" y="160" width="75" height="15" uuid="15decc33-89a0-436f-9e7f-8c6d20c7f039"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="true"/>
-					<paragraph firstLineIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[CurrencyUtil.format($P{TOTAL_AMOUNT})]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="130" width="75" height="15" uuid="b5e95e6f-f470-446c-aa1e-e683dc3a3bd2"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Entrada:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="145" width="75" height="15" uuid="c5114ec6-2889-4203-b4d1-a3e848ae718e"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Parcelas:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="160" width="75" height="15" uuid="ce413d1e-4b3e-4dbd-8770-2e719c5b40af"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Total:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="353" y="160" width="75" height="15" uuid="a74802e9-eb23-4548-84cd-51de80f7020a"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="true"/>
-					<paragraph firstLineIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[CurrencyUtil.format($P{TOTAL_AMOUNT})]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="278" y="110" width="277" height="20" uuid="ff738a68-e45e-47b1-a43d-5e668a92bc04"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-					<paragraph firstLineIndent="10"/>
-				</textElement>
-				<text><![CDATA[Forma de Pagamento:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="278" y="30" width="277" height="80" uuid="d7cbe291-55ea-42fc-9cab-3d39ad19d826"/>
-				<textElement textAlignment="Justified" markup="html">
-					<font size="9"/>
-					<paragraph firstLineIndent="20" leftIndent="10" rightIndent="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Eu, <b>" + $P{PATIENT}.getName() + "</b>, portador do RG <b>" + $P{PATIENT}.getRg() + "</b> e CPF <b>" + $P{PATIENT}.getCpf() + "</b>, me comprometo a seguir a forma de pagamento especificada abaixo à clínica <b>" + $P{CLINIC}.getName() + "</b> pela prestação do serviço <b>" + $P{SERVICE} + "</b>, estando sujeito a pagar as penalidades descritas no boleto em cada parcela atrasada."]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="278" y="160" width="75" height="15" uuid="8bdc9bfc-f5f3-48a3-a0ad-775bfc5895d6"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Total:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="278" y="145" width="75" height="15" uuid="cf4619c9-893e-4ec0-b271-5a1df1c685fb"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Parcelas:]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="278" y="175" width="277" height="30" uuid="ebd59157-1e0b-4cef-badd-21f2a1567c5a"/>
 				<textElement verticalAlignment="Bottom">
@@ -690,29 +800,6 @@
 				</textElement>
 				<text><![CDATA[_____________, ___ de __________ de 20___]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="353" y="130" width="75" height="15" uuid="0ac9f587-c331-4d8d-a877-59be956154d4"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="true"/>
-					<paragraph firstLineIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[CurrencyUtil.format($P{INPUT_AMOUNT})]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="278" y="130" width="75" height="15" uuid="1517b1f5-cb23-49a1-820a-b028905e0694"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Entrada:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="353" y="145" width="75" height="15" uuid="20b14031-efa9-40e1-9da1-a9057410ce8b"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
-					<font size="9" isBold="true"/>
-					<paragraph firstLineIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL} + " x " + CurrencyUtil.format($P{INSTALLMENT_AMOUNT})]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="278" y="205" width="277" height="30" uuid="cd9084b3-bd9a-4a5b-a393-05a4696cc3a1"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
@@ -721,20 +808,28 @@
 				</textElement>
 				<text><![CDATA[_________________________________________]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="278" y="235" width="277" height="15" uuid="bf31b6bc-f4f5-4fbe-8edd-71261ecc5ac0"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{PATIENT}.getName()]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="278" y="0" width="277" height="30" uuid="20dd5945-74ab-43d0-88cf-6a6f06611c07"/>
+				<reportElement x="278" y="0" width="277" height="30" uuid="a2f25220-839a-4ed5-b74e-f4d7132826c0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Declaração]]></text>
+				<text><![CDATA[Recibo]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="278" y="235" width="277" height="15" uuid="fbce1660-ca7d-46c8-81d3-66ba962eb684"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DENTIST}.getName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="30" width="277" height="145" uuid="175d8d65-cf34-4dcd-a526-60c004e611d1"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+					<paragraph firstLineIndent="20" leftIndent="10" rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A clínica <b>" + $P{CLINIC}.getName() + "</b>, representada pelo Cirurgião Dentista <b>" + $P{DENTIST}.getName() + "</b>, portador do CRO <b>" + $P{DENTIST}.getCro($P{STATE}) + "</b> e CPF <b>" + $P{DENTIST}.getCpf() + "</b>, recebeu a quantia de <b>" + CurrencyUtil.format($P{INPUT_AMOUNT}) + "</b> de <b>" + $P{PATIENT}.getName() + "</b>, portador do CPF <b>" + $P{PATIENT}.getCpf() + "</b> referente à entrada do pagamento para a prestação do serviço <b>" + $P{SERVICE} + "</b>."]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
