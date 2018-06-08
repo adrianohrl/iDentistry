@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
-import tech.adrianohrl.util.PropertyUtil;
+import tech.adrianohrl.identistry.util.PropertyUtil;
  
 /**
  *

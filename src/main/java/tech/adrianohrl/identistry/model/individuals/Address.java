@@ -56,7 +56,7 @@ public class Address implements Comparable<Address>, Serializable {
 
     @Override
     public String toString() {
-        return street + ", " + number + ", " + area + ", " + zip + ", " + city + ", " + uf + ", " + country;
+        return street + ", " + number + ", " + area + ", " + city + ", " + uf;
     }
 
     @Override

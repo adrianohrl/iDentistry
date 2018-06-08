@@ -7,9 +7,15 @@ package tech.adrianohrl.identistry.view.wizards.pages;
 
 import java.awt.FlowLayout;
 import javax.persistence.EntityManager;
+import jiconfont.icons.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
+import se.gustavkarlsson.gwiz.WizardController;
+import se.gustavkarlsson.gwiz.wizards.JFrameWizard;
+import tech.adrianohrl.dao.DataSource;
 import tech.adrianohrl.identistry.exceptions.iDentistryException;
+import tech.adrianohrl.identistry.model.individuals.Assistant;
 import tech.adrianohrl.identistry.model.individuals.Loggable;
 import tech.adrianohrl.identistry.model.individuals.Patient;
 import tech.adrianohrl.identistry.model.individuals.Person;
@@ -81,6 +87,15 @@ public class PersonWizardPage extends AbstractWizardPage {
     @Override
     protected boolean isFinishAllowed() {
         return false;
+    }
+    
+    public static void main(String[] args) {
+        IconFontSwing.register(FontAwesome.getIconFont());     
+        JFrameWizard wizard = new JFrameWizard("g-wiz demo");
+        AbstractWizardPage page = new PersonWizardPage(NewWizardTypes.NEW_ASSISTANT, DataSource.createEntityManager(), new Assistant());
+        WizardController wizardController = new WizardController(wizard);
+        wizardController.startWizard(page);
+        wizard.setVisible(true);
     }
     
 }

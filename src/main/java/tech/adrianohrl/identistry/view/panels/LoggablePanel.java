@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.control.dao.individuals.LoggableDAO;
 import tech.adrianohrl.identistry.model.individuals.Loggable;
-import tech.adrianohrl.util.PropertyUtil;
+import tech.adrianohrl.identistry.util.PropertyUtil;
 
 /**
  *
@@ -118,11 +118,12 @@ public class LoggablePanel extends AbstractWizardPagePanel {
             dictionaryList.add(new DictionaryBuilder()
                     .setDictionaryName("exclude")
                     .setExclusion(true)
-                    .addWord(usernameTextField.getText(), 0)
+                    .addWord(loggable.getUsername(), 0)
+                    .addWord(loggable.getName(), 0)
                     .createDictionary());
         }
         Configuration configuration = new ConfigurationBuilder()
-                .setLocale(PropertyUtil.getDefaultLocale())
+                .setLocale(tech.adrianohrl.util.PropertyUtil.getDefaultLocale())
                 .setMinimumEntropy(LOW_ENTROPY)
                 .setDictionaries(dictionaryList)
                 .createConfiguration();

@@ -7,8 +7,6 @@ package tech.adrianohrl.identistry.view.frames;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
@@ -21,6 +19,7 @@ import javax.swing.KeyStroke;
 import jiconfont.icons.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import org.apache.log4j.Logger;
+import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import se.gustavkarlsson.gwiz.Wizard;
 import se.gustavkarlsson.gwiz.WizardController;
 import tech.adrianohrl.dao.DataSource;
@@ -35,8 +34,8 @@ import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
  */
 public class WizardFrame extends javax.swing.JFrame implements Wizard {
     
-    private static final Dimension defaultminimumSize = new Dimension(450, 450);
     private final static Logger logger = Logger.getLogger(WizardFrame.class);
+    private static final Dimension defaultMinimumSize = new Dimension(10, 10);
 
     /**
      * Creates new form WizardFrame
@@ -45,20 +44,12 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
     public WizardFrame(String title) {
         super(title);
         initComponents();
-        setMinimumSize(defaultminimumSize);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int xPosition = (screenSize.width / 2) - (defaultminimumSize.width / 2);
-        int yPosition = (screenSize.height / 2) - (defaultminimumSize.height / 2);
-        setLocation(xPosition, yPosition);
         wizardPageContainer.addContainerListener(new WizardFrame.MinimumSizeAdjuster());
-        
-        GridBagConstraints wizardPageContainerConstraint = new GridBagConstraints();
-        wizardPageContainerConstraint.gridwidth = 5;
-        wizardPageContainerConstraint.fill = GridBagConstraints.BOTH;
-        wizardPageContainerConstraint.gridx = 0;
-        wizardPageContainerConstraint.gridy = 0;
-        wizardPageContainerConstraint.insets = new Insets(5, 5, 5, 5);
-        getContentPane().add(wizardPageContainer, wizardPageContainerConstraint);
+        setMinimumSize(defaultMinimumSize);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int xPosition = (screenSize.width - defaultMinimumSize.width) / 2;
+        int yPosition = (screenSize.height - defaultMinimumSize.height) / 2;
+        setLocation(xPosition, yPosition);
     }
 
     /**
@@ -83,10 +74,10 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[]{0};
-        layout.rowHeights = new int[]{0, 0};
-        layout.columnWeights = new double[]{1.0};
-        layout.rowWeights = new double[]{1.0, 0.0};
+        layout.columnWidths = new int[] {0};
+        layout.rowHeights = new int[] {1, 0};
+        layout.columnWeights = new double[] {1.0};
+        layout.rowWeights = new double[] {1.0, 0.0};
         getContentPane().setLayout(layout);
 
         wizardPageContainer.setPreferredSize(new java.awt.Dimension(1, 1));
@@ -181,8 +172,6 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 225;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         getContentPane().add(buttonsPanel, gridBagConstraints);
 
@@ -194,6 +183,7 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void finishButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finishButtonActionPerformed
+        System.out.println("Anounce finish...");
         dispose();
     }//GEN-LAST:event_finishButtonActionPerformed
 
@@ -231,11 +221,16 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
 
         @Override
         public void componentAdded(ContainerEvent e) {
+            Dimension d = e.getChild().getPreferredSize();
+            System.out.println("Child prefered width: " + d.width + ", child prefered height: " + d.height);
             Dimension currentSize = getSize();
+            System.out.println("Current width: " + currentSize.width + ", current height: " + currentSize.height);
             Dimension preferredSize = getPreferredSize();
+            System.out.println("Prefered width: " + preferredSize.width + ", prefered height: " + preferredSize.height);
             Dimension newSize = new Dimension(currentSize);
             newSize.width = Math.max(currentSize.width, preferredSize.width);
             newSize.height = Math.max(currentSize.height, preferredSize.height);
+            System.out.println("New width: " + newSize.width + ", new height: " + newSize.height);
             setMinimumSize(newSize);
         }
 
@@ -243,8 +238,7 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         public void componentRemoved(ContainerEvent e) {
         }
 
-	}
-
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonsPanel;
@@ -257,6 +251,8 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
     private javax.swing.JPanel wizardPageContainer;
     // End of variables declaration//GEN-END:variables
 
+    private static final EntityManager em = DataSource.createEntityManager();
+    
     /**
      * @param args the command line arguments
      */
@@ -276,10 +272,17 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         WizardFrame wizard = new WizardFrame(type.getTitle());
         WizardController controller = new WizardController(wizard);
         wizard.setVisible(true);
-        EntityManager em = DataSource.createEntityManager();
-        //LoggableWizardPage page = new LoggableWizardPage(type, em);
+        wizard.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                em.close();
+                DataSource.closeEntityManagerFactory();
+                System.exit(0);
+            }
+        });
         Assistant assistant = new Assistant();
-        PersonWizardPage page = new PersonWizardPage(type, em, assistant);
+        AbstractWizardPage page = new PersonWizardPage(type, em, assistant);
+        page = new LoggableWizardPage(type, em, assistant);
         controller.startWizard(page);
         //em.close();
         //DataSource.closeEntityManagerFactory();

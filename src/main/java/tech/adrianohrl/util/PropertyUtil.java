@@ -17,9 +17,10 @@ import java.util.Properties;
  */
 public class PropertyUtil {
     
-    private PropertyUtil() {}
+    private static final String PROPERTY_FILENAME = "config.properties";
     
-    private static final String propertyFilename = "config.properties";
+    private PropertyUtil() {
+    }
     
     public static String getResourceConfigFolderPath() {
         ClassLoader classLoader = PropertyUtil.class.getClassLoader();
@@ -31,46 +32,28 @@ public class PropertyUtil {
         return url != null ? url.getFile() : "";
     }
     
-    public static String getPathToSave() {
-        String filepath = PropertyUtil.getProperty("general.config.filepath");
-        return !filepath.startsWith("/") ? System.getProperty("user.home")  + "/" + filepath : filepath;
-    }
-    
-    public static String getDefaultProfilePicturePath() {
-        String path = PropertyUtil.getProperty("images.default.profile.picture");
-        System.out.println("default profile picture path: " + path);
-        ClassLoader classLoader = PropertyUtil.class.getClassLoader();
-        URL url = classLoader.getResource(path);
-        System.out.println("url path: " + url);
-        return url != null ? url.getFile() : "";
-    }
-    
-    public static double getLowPasswordEntropyThreshold() {
-        return Double.parseDouble(PropertyUtil.getProperty("general.config.password.entropy.threshold.low"));
-    }
-    
-    public static double getHighPasswordEntropyThreshold() {
-        return Double.parseDouble(PropertyUtil.getProperty("general.config.password.entropy.threshold.high"));
-    }
-    
     public static Locale getDefaultLocale() {
-        String language = PropertyUtil.getProperty("general.config.locale.language");
-        String country = PropertyUtil.getProperty("general.config.locale.country");
+        String language = tech.adrianohrl.util.PropertyUtil.getProperty("general.config.locale.language");
+        String country = tech.adrianohrl.util.PropertyUtil.getProperty("general.config.locale.country");
         return new Locale(language, country);
+    }
+    
+    public static String getPathToSave() {
+        String filepath = tech.adrianohrl.util.PropertyUtil.getProperty("general.config.filepath");
+        return !filepath.startsWith("/") ? System.getProperty("user.home")  + "/" + filepath : filepath;
     }
     
     public static String getProperty(String property) {
         Properties properties = new Properties();
-        ClassLoader classLoader = PropertyUtil.class.getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(propertyFilename);
+        ClassLoader classLoader = tech.adrianohrl.identistry.util.PropertyUtil.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(PROPERTY_FILENAME);
         try {
             properties.load(inputStream);
         } catch (IOException e) {
             String projectName = PropertyUtil.getProperty("project.name");
-            System.err.println("The " + projectName + " project is not configured properly: the \"config.properties\" file does not exist.");
+            throw new RuntimeException("The " + projectName + " project is not configured properly: the \"config.properties\" file does not exist.");
         }
         return properties.getProperty(property);
     }
-
     
 }

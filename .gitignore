@@ -31,3 +31,4 @@ target/
 others/cp
 others/tests
 /src/test/java/General.java
+/src/test/java/PaymentSlipGenerator.java

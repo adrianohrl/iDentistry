@@ -60,7 +60,7 @@ public class Dentist extends Loggable {
 
     @Override
     public String toString() {
-        return super.toString() + (!cros.isEmpty() ? " " + cros.get(0) : "");
+        return (getGender().isFemale() ? "Dra. " : "Dr. ") + getName();
     }
     
     public boolean hasSpecialty(Specialty specialty) {

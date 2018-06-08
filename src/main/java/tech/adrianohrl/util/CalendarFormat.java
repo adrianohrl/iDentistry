@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.util;
 
 import java.text.DateFormat;
@@ -12,16 +7,16 @@ import java.util.Date;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  */
 public class CalendarFormat {
     
-    private final static DateFormat dateOnlyFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    private final static DateFormat dateFormatter = new SimpleDateFormat("d MMM yyyy");
-    private final static DateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
+    private final static DateFormat DATE_ONLY_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
+    private final static DateFormat DATE_FORMATTER = new SimpleDateFormat("d MMM yyyy");
+    private final static DateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm:ss");
     
     public static String formatDate(Date date) {
-        return date != null ? dateOnlyFormatter.format(date) : "";
+        return date != null ? DATE_ONLY_FORMATTER.format(date) : "";
     }
     
     public static String formatDate(Calendar date) {
@@ -29,7 +24,7 @@ public class CalendarFormat {
     }
     
     public static String formatTime(Date time) {
-        return time != null ? timeFormatter.format(time) : "";
+        return time != null ? TIME_FORMATTER.format(time) : "";
     }
     
     public static String formatTime(Calendar time) {
@@ -49,9 +44,9 @@ public class CalendarFormat {
             return "";
         }
         if (dateFirst) {
-            return dateFormatter.format(calendar) + separator + timeFormatter.format(calendar);
+            return DATE_FORMATTER.format(calendar) + separator + TIME_FORMATTER.format(calendar);
         }
-        return timeFormatter.format(calendar) + separator + dateFormatter.format(calendar);
+        return TIME_FORMATTER.format(calendar) + separator + DATE_FORMATTER.format(calendar);
     }
     
     public static String format(Calendar calendar, String separator, boolean dateFirst) {

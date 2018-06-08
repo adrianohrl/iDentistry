@@ -8,6 +8,7 @@ package tech.adrianohrl.identistry.model.individuals;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import tech.adrianohrl.util.PersonUtil;
 
 /**
  *
@@ -32,7 +34,7 @@ public class Person implements Comparable<Person>, Serializable {
     @Column(updatable = false)
     private Calendar dob;
     @OneToOne(cascade = CascadeType.REMOVE)
-    private Address address;
+    private Address address = new Address();
     @Column(unique = true)
     private String rg;
     @Column(unique = true)
@@ -45,6 +47,8 @@ public class Person implements Comparable<Person>, Serializable {
     @Column(unique = true)
     private String instagram;
     private String occupation;
+    private String maritalStatus;
+    private String race;
 
     public Person() {
     }
@@ -101,13 +105,24 @@ public class Person implements Comparable<Person>, Serializable {
         this.occupation = occupation;
     }
     
+    public boolean isValidPhone() {
+        return PersonUtil.isValidPhone(phone);
+    }
+    
+    public boolean isValidEmail() {
+        return PersonUtil.isValidEmail(email);
+    }
+    
+    public boolean isValidCPF() {
+        return PersonUtil.isValidCPF(cpf);
+    }
+    
     public int getAge() {
-        Calendar today = new GregorianCalendar();
-        return today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+        return PersonUtil.getAge(dob);
     }
     
     public boolean isUnderage() {
-        return getAge() < 18;
+        return PersonUtil.isUnderage(dob);
     }
 
     @Override
@@ -231,6 +246,22 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setOccupation(String occupation) {
         this.occupation = occupation;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getRace() {
+        return race;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
     }
     
 }

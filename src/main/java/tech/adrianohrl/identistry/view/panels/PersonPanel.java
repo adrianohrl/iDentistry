@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.control.dao.individuals.PersonDAO;
 import tech.adrianohrl.identistry.model.individuals.Address;
-import tech.adrianohrl.identistry.model.individuals.AddressUtil;
+import tech.adrianohrl.util.AddressUtil;
 import tech.adrianohrl.identistry.model.individuals.Genders;
 import tech.adrianohrl.identistry.model.individuals.Person;
 import tech.adrianohrl.identistry.view.components.ImageUtil;
