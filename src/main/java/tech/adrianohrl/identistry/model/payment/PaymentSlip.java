@@ -30,7 +30,9 @@ public class PaymentSlip implements Iterable<Payment> {
     public PaymentSlip(double amount, Payment input, int numberOfInstallments, double interestRate, Calendar firstPayday) {
         this.amount = amount;
         this.input = input;
-        input.setObs("Input payment of a " + CurrencyUtil.format(amount) + " payment slip.");
+        if (input != null) {
+            input.setObs("Input payment of a " + CurrencyUtil.format(amount) + " payment slip.");
+        }
         this.interestRate = interestRate;        
         generatePayments(numberOfInstallments, firstPayday);
     }
@@ -44,24 +46,30 @@ public class PaymentSlip implements Iterable<Payment> {
             throw new iDentistryException("Invalid payment slip payday.");
         }
         double installmentAmount = getInstallmentAmount(numberOfInstallments, firstPayday);
-        Calendar dueDate = (Calendar) firstPayday.clone();
+        Calendar dueDate = firstPayday != null ? (Calendar) firstPayday.clone() : null;
         for (int i = 0; i < numberOfInstallments; i++) {
             String obs = "Installment payment of a " + CurrencyUtil.format(amount) + " payment slip (" + i + 1 + " of " + numberOfInstallments + ")";
-            payments.add(new Payment(Types.PAYMENT_SLIP, null, (Calendar) dueDate.clone(), installmentAmount, 0.0, obs));
-            dueDate.add(Calendar.MONTH, 1);
+            Calendar date = null;
+            if (dueDate != null) {
+                date = (Calendar) dueDate.clone();
+                dueDate.add(Calendar.MONTH, 1);
+            }
+            payments.add(new Payment(Types.PAYMENT_SLIP, null, date, installmentAmount, 0.0, obs));
         }
     }
     
     private double getInstallmentAmount(int numberOfInstallments, Calendar firstPayday) {
-        int numberOfDays = CalendarUtil.getDaysBetween(contractDate, firstPayday);
-        int numberOfMonths = numberOfInstallments - 1;
-        return LoanUtil.getInstallment(amount - input.getAmount(), numberOfDays, numberOfMonths, 100 * interestRate);
+        int numberOfDays = firstPayday != null ? CalendarUtil.getDaysBetween(contractDate, firstPayday) : 0;
+        int numberOfMonths = numberOfInstallments - (input != null ? 1 : 0);
+        double remainingAmount = amount - (input != null ? input.getAmount() : 0.0);
+        return LoanUtil.getInstallment(remainingAmount, numberOfDays, numberOfMonths, 100 * interestRate);
     }
     
     public double getInstallmentAmount() {
-        int numberOfDays = CalendarUtil.getDaysBetween(contractDate, payments.get(0).getDueDate());
-        int numberOfMonths = payments.size() - 1;
-        return LoanUtil.getInstallment(amount - input.getAmount(), numberOfDays, numberOfMonths, 100 * interestRate);
+        int numberOfDays = payments.get(0).getDueDate() != null ? CalendarUtil.getDaysBetween(contractDate, payments.get(0).getDueDate()) : 0;
+        int numberOfMonths = payments.size() - (input != null ? 1 : 0);
+        double remainingAmount = amount - (input != null ? input.getAmount() : 0.0);
+        return LoanUtil.getInstallment(remainingAmount, numberOfDays, numberOfMonths, 100 * interestRate);
     }
     
     public boolean isPaid() {

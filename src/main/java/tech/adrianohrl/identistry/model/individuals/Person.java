@@ -7,8 +7,6 @@ package tech.adrianohrl.identistry.model.individuals;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.regex.Pattern;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

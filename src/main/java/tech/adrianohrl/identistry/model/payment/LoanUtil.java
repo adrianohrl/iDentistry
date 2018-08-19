@@ -21,7 +21,8 @@ public class LoanUtil {
             m %= 30;
         }
         if (i <= 0.0) {
-            return q / (n + (m != 0 ? 1 : 0));
+            //return q / (n + (m != 0 ? 1 : 0));
+            return q / n;
         }
         double j = getDailyInterest(i);
         return q * (m * j + n * i) / (m + n) / (1 - Math.pow(1 + j, -m) * Math.pow(1 + i, -n));

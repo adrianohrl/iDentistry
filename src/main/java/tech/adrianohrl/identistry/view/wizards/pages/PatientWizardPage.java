@@ -12,7 +12,6 @@ import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.exceptions.iDentistryException;
 import tech.adrianohrl.identistry.model.individuals.Patient;
 import tech.adrianohrl.identistry.view.panels.PatientPanel;
-import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
 
 /**
  *
@@ -27,16 +26,15 @@ public class PatientWizardPage extends AbstractWizardPage {
 
     /**
      *
-     * @param type
      * @param em
      * @param patient
      */
-    public PatientWizardPage(NewWizardTypes type, EntityManager em, Patient patient) {
+    public PatientWizardPage(EntityManager em, Patient patient) {
         this.patient = patient;
         this.panel = new PatientPanel(this, em, patient);
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
-        if (!type.isNewPatient()) {
-            throw new iDentistryException("Invalid wizard page request for PatientWizardPage: " + type);
+        if (patient == null) {
+            throw new iDentistryException("Invalid wizard page request for PatientWizardPage: the Patient object must not be null.");
         }
         setLayout(new FlowLayout());
         add(panel);

@@ -88,11 +88,11 @@ public class AddressUtil {
     }
 
     public static boolean isValid(String state) {
-        return STATES.containsKey(state);
+        return state != null && STATES.containsKey(state);
     }
     
     public static boolean isValid(String state, String city) {
-        return STATES.containsKey(state) && CITIES.get(state).contains(city);
+        return STATES.containsKey(state) && city != null && CITIES.get(state).contains(city);
     }
     
     public static void main(String[] args) {

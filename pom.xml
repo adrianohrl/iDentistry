@@ -7,7 +7,7 @@
     <url>https://github.com/adrianohrl/iDentistry</url>
     <groupId>tech.adrianohrl</groupId>
     <artifactId>identistry</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
     <packaging>jar</packaging>
     
     <developers>
@@ -97,6 +97,12 @@
             <artifactId>hibernate-jpamodelgen</artifactId>
             <version>${hibernate.jpamodelgen.version}</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-maven-plugin</artifactId>
+            <version>4.3.1.Final</version>
         </dependency>
         
         <dependency>

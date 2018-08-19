@@ -11,6 +11,8 @@ import java.awt.Toolkit;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -23,9 +25,9 @@ import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import se.gustavkarlsson.gwiz.Wizard;
 import se.gustavkarlsson.gwiz.WizardController;
 import tech.adrianohrl.dao.DataSource;
-import tech.adrianohrl.identistry.model.individuals.Assistant;
-import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
-import tech.adrianohrl.identistry.view.wizards.pages.LoggableWizardPage;
+import tech.adrianohrl.identistry.model.individuals.Genders;
+import tech.adrianohrl.identistry.model.individuals.Patient;
+import tech.adrianohrl.identistry.model.individuals.Person;
 import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
 
 /**
@@ -268,8 +270,7 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.error(ex);
         }
-        NewWizardTypes type = NewWizardTypes.NEW_ASSISTANT;
-        WizardFrame wizard = new WizardFrame(type.getTitle());
+        WizardFrame wizard = new WizardFrame("New...");
         WizardController controller = new WizardController(wizard);
         wizard.setVisible(true);
         wizard.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -280,9 +281,9 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
                 System.exit(0);
             }
         });
-        Assistant assistant = new Assistant();
-        AbstractWizardPage page = new PersonWizardPage(type, em, assistant);
-        page = new LoggableWizardPage(type, em, assistant);
+        Person person = new Patient();
+        AbstractWizardPage page = new PersonWizardPage(em, person);
+        //page = new LoggableWizardPage(em, assistant);
         controller.startWizard(page);
         //em.close();
         //DataSource.closeEntityManagerFactory();

@@ -14,7 +14,6 @@ import tech.adrianohrl.identistry.model.individuals.Assistant;
 import tech.adrianohrl.identistry.model.individuals.Dentist;
 import tech.adrianohrl.identistry.model.individuals.Loggable;
 import tech.adrianohrl.identistry.view.panels.LoggablePanel;
-import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
 
 /**
  *
@@ -25,33 +24,25 @@ public class LoggableWizardPage extends AbstractWizardPage {
     private static final Logger logger = Logger.getLogger(LoggableWizardPage.class);
     private final AbstractWizardPage nextPage;
     private final LoggablePanel panel;
-    private final NewWizardTypes type;
     private final Loggable loggable;
 
     /**
      *
-     * @param type
      * @param em
      * @param loggable
      */
-    public LoggableWizardPage(NewWizardTypes type, EntityManager em, Loggable loggable) {
-        this.type = type;
+    public LoggableWizardPage(EntityManager em, Loggable loggable) {
         this.loggable = loggable;
         this.panel = new LoggablePanel(this, em, loggable);
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
+        String type = loggable.getClass().getSimpleName();
         switch (type) {
-            case NEW_ASSISTANT:
-                if (!(loggable instanceof Assistant)) {
-                    throw new iDentistryException("The given loggable object must be an instance of the Assistant class in order to build an Assistant object.");
-                }
-                //nextPage = new AssistantWizardPage(type, em, (Assistant) loggable);
+            case "Assistant":
+                //nextPage = new AssistantWizardPage(em, (Assistant) loggable);
                 nextPage = null;
                 break;
-            case NEW_DENTIST:
-                if (!(loggable instanceof Dentist)) {
-                    throw new iDentistryException("The given loggable object must be an instance of the Dentist class in order to build a Dentist object.");
-                }
-                nextPage = new DentistWizardPanel(type, em, (Dentist) loggable);
+            case "Dentist":
+                nextPage = new DentistWizardPanel(em, (Dentist) loggable);
                 break;
             default:
                 throw new iDentistryException("Invalid wizard page request for LoggableWizardPage: " + type);
@@ -77,12 +68,12 @@ public class LoggableWizardPage extends AbstractWizardPage {
 
     @Override
     protected boolean isNextAllowed() {
-        return type.isNewDentist() && panel.isFilled();
+        return loggable instanceof Dentist && panel.isFilled();
     }
 
     @Override
     protected boolean isFinishAllowed() {
-        return type.isNewAssistant() && panel.isFilled();
+        return loggable instanceof Assistant && panel.isFilled();
     }
     
 }

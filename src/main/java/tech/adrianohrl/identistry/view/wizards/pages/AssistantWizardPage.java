@@ -12,7 +12,6 @@ import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import tech.adrianohrl.identistry.exceptions.iDentistryException;
 import tech.adrianohrl.identistry.model.individuals.Assistant;
 import tech.adrianohrl.identistry.view.panels.AssistantPanel;
-import tech.adrianohrl.identistry.view.wizards.NewWizardTypes;
 
 /**
  *
@@ -27,16 +26,15 @@ public class AssistantWizardPage extends AbstractWizardPage {
 
     /**
      *
-     * @param type
      * @param em
      * @param assistant
      */
-    public AssistantWizardPage(NewWizardTypes type, EntityManager em, Assistant assistant) {
+    public AssistantWizardPage(EntityManager em, Assistant assistant) {
         this.assistant = assistant;
         this.panel = new AssistantPanel(this, em, assistant);
         logger.debug("Created new " + panel.getClass().getSimpleName() + ".");
-        if (!type.isNewAssistant()) {
-            throw new iDentistryException("Invalid wizard page request for AssistantWizardPage: " + type);
+        if (assistant == null) {
+            throw new iDentistryException("Invalid wizard page request for AssistantWizardPage: the Assistant object must not be null.");
         }
         setLayout(new FlowLayout());
         add(panel);

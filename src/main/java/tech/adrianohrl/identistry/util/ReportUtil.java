@@ -7,7 +7,6 @@ import tech.adrianohrl.identistry.model.individuals.Clinic;
 import tech.adrianohrl.identistry.model.individuals.Dentist;
 import tech.adrianohrl.identistry.model.individuals.Patient;
 import tech.adrianohrl.identistry.model.payment.PaymentSlip;
-import tech.adrianohrl.util.CurrencyUtil;
 
 /**
  *
@@ -33,7 +32,7 @@ public class ReportUtil {
         double penaltyPerDay = 0.35;
         parameters.put("PENAULTY_RATE", PropertyUtil.getDefaultPaymentInstallmentPenaltyRate());
         parameters.put("PENAULTY_PER_DAY", PropertyUtil.getDefaultPaymentInstallmentPenaltyPerDay());
-        parameters.put("INPUT_AMOUNT", paymentSlip.getInput().getAmount());
+        parameters.put("INPUT_AMOUNT", paymentSlip.getInput() != null ? paymentSlip.getInput().getAmount() : 0.0);
         parameters.put("INSTALLMENT_AMOUNT", paymentSlip.getInstallmentAmount());
         parameters.put("TOTAL_AMOUNT", paymentSlip.getAmount());
         String sourceFilename = "PaymentSlip.jasper";

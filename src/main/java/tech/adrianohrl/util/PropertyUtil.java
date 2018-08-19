@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.util;
 
 import java.io.IOException;
@@ -13,7 +8,7 @@ import java.util.Properties;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  */
 public class PropertyUtil {
     
@@ -33,19 +28,19 @@ public class PropertyUtil {
     }
     
     public static Locale getDefaultLocale() {
-        String language = tech.adrianohrl.util.PropertyUtil.getProperty("general.config.locale.language");
-        String country = tech.adrianohrl.util.PropertyUtil.getProperty("general.config.locale.country");
+        String language = PropertyUtil.getProperty("general.config.locale.language");
+        String country = PropertyUtil.getProperty("general.config.locale.country");
         return new Locale(language, country);
     }
     
     public static String getPathToSave() {
-        String filepath = tech.adrianohrl.util.PropertyUtil.getProperty("general.config.filepath");
+        String filepath = PropertyUtil.getProperty("general.config.filepath");
         return !filepath.startsWith("/") ? System.getProperty("user.home")  + "/" + filepath : filepath;
     }
     
     public static String getProperty(String property) {
         Properties properties = new Properties();
-        ClassLoader classLoader = tech.adrianohrl.identistry.util.PropertyUtil.class.getClassLoader();
+        ClassLoader classLoader = PropertyUtil.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(PROPERTY_FILENAME);
         try {
             properties.load(inputStream);
