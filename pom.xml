@@ -7,7 +7,7 @@
     <url>https://github.com/adrianohrl/iDentistry</url>
     <groupId>tech.adrianohrl</groupId>
     <artifactId>identistry</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.14</version>
     <packaging>jar</packaging>
     
     <developers>

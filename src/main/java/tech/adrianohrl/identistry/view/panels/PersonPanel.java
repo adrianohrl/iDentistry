@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
-import javax.swing.ButtonModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -62,7 +61,7 @@ public class PersonPanel extends AbstractWizardPagePanel {
         setListeners();
     }
     
-    public String getPersonName() {
+    /*public String getPersonName() {
         return nameTextField.getText();
     }
     
@@ -183,6 +182,25 @@ public class PersonPanel extends AbstractWizardPagePanel {
             && !getPersonPhone().isEmpty()
             && !getPersonRG().isEmpty()
             && isAddressFilled();
+            //&& !getPersonProfilePicture().isEmpty();
+    }*/
+            
+    @Override
+    public boolean isFilled() {
+        Address address = person.getAddress();
+        return person != null 
+            && person.getName() != null && !person.getName().isEmpty() 
+            && person.getGender() != null
+            && person.getDob() != null
+            && person.getPhone() != null && !person.getPhone().isEmpty()
+            && person.getRg() != null && !person.getRg().isEmpty()
+            && person.getCpf() != null && !person.getCpf().isEmpty()
+            && address != null
+            && address.getStreet() != null && !address.getStreet().isEmpty()
+            && address.getNumber() > 0
+            && address.getArea() != null && !address.getArea().isEmpty()
+            && address.getCity() != null && !address.getCity().isEmpty()
+            && address.getUf() != null && !address.getUf().isEmpty();
             //&& !getPersonProfilePicture().isEmpty();
     }
 
@@ -312,10 +330,22 @@ public class PersonPanel extends AbstractWizardPagePanel {
                 System.out.println("Changed person's " + "cpf: " + person.getCpf());
             }
         });
-        rgTextField.addPropertyChangeListener("text", (PropertyChangeEvent evt) -> {
-            person.setRg((String) evt.getNewValue());
-            logger.trace("Changed person's " + "rg: " + person.getRg());
-            System.out.println("Changed person's " + "rg: " + person.getRg());
+        rgTextField.addFocusListener(new FocusListener() {
+            private void update(String str) {
+                person.setRg(str);
+                logger.trace("Changed person's " + "rg: " + person.getRg());
+                System.out.println("Changed person's " + "rg: " + person.getRg());
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                update(textField.getText());
+            }
         });
         occupationTextField.addFocusListener(new FocusListener() {
             private void update(String str) {
@@ -355,7 +385,7 @@ public class PersonPanel extends AbstractWizardPagePanel {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 Long number = (Long) evt.getNewValue();
-                person.getAddress().setNumber(number.intValue());
+                person.getAddress().setNumber(number != null ? number.intValue() : 0);
                 logger.trace("Changed person's address " + "number: " + person.getAddress().getNumber());
                 System.out.println("Changed person's address " + "number: " + person.getAddress().getNumber());
             }
@@ -684,7 +714,7 @@ public class PersonPanel extends AbstractWizardPagePanel {
         whatsappCheckBox.setNextFocusableComponent(cpfFormattedTextField);
 
         cpfLabel.setLabelFor(cpfFormattedTextField);
-        cpfLabel.setText("CPF:");
+        cpfLabel.setText("CPF *:");
         cpfLabel.setFocusable(false);
 
         try {

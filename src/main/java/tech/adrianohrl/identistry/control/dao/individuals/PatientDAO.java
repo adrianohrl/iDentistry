@@ -5,6 +5,7 @@
  */
 package tech.adrianohrl.identistry.control.dao.individuals;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import tech.adrianohrl.identistry.model.individuals.Patient;
 
@@ -16,6 +17,13 @@ public class PatientDAO extends PersonDAO<Patient> {
 
     public PatientDAO(EntityManager em) {
         super(em, Patient.class);
+    }
+
+    @Override
+    public void create(Patient patient) throws EntityExistsException {
+        AddressDAO addressDAO = new AddressDAO(em);
+        addressDAO.create(patient.getAddress());
+        super.create(patient);
     }
     
 }

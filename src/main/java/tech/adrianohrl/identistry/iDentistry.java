@@ -5,6 +5,8 @@
  */
 package tech.adrianohrl.identistry;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.EventListener;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
@@ -14,6 +16,9 @@ import org.apache.log4j.Logger;
 import se.gustavkarlsson.gwiz.WizardController;
 import tech.adrianohrl.dao.DataSource;
 import tech.adrianohrl.dao.DataSourceException;
+import tech.adrianohrl.identistry.control.dao.individuals.AssistantDAO;
+import tech.adrianohrl.identistry.control.dao.individuals.DentistDAO;
+import tech.adrianohrl.identistry.control.dao.individuals.PatientDAO;
 import tech.adrianohrl.identistry.view.dialogs.LoginDialog;
 import tech.adrianohrl.identistry.model.individuals.Assistant;
 import tech.adrianohrl.identistry.model.individuals.Dentist;
@@ -299,7 +304,13 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     private void patientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientMenuItemActionPerformed
         WizardFrame wizard = new WizardFrame("New patient...");
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(em, new Patient());
+        PersonWizardPage page = new PersonWizardPage(em, new Patient(), new PatientDAO(em));
+        wizard.getFinishButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                page.register();
+            }
+        });
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_patientMenuItemActionPerformed
@@ -307,7 +318,13 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     private void assistantMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assistantMenuItemActionPerformed
         WizardFrame wizard = new WizardFrame("New assistant...");
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(em, new Assistant());
+        PersonWizardPage page = new PersonWizardPage(em, new Assistant(), new AssistantDAO(em));
+        wizard.getFinishButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                page.register();
+            }
+        });
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_assistantMenuItemActionPerformed
@@ -315,7 +332,13 @@ public class iDentistry extends javax.swing.JFrame implements EventListener {
     private void dentistMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dentistMenuItemActionPerformed
         WizardFrame wizard = new WizardFrame("New dentist...");
         WizardController controller = new WizardController(wizard);
-        PersonWizardPage page = new PersonWizardPage(em, new Dentist());
+        PersonWizardPage page = new PersonWizardPage(em, new Dentist(), new DentistDAO(em));
+        wizard.getFinishButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                page.register();
+            }
+        });
         controller.startWizard(page);
         wizard.setVisible(true);
     }//GEN-LAST:event_dentistMenuItemActionPerformed

@@ -8,11 +8,11 @@ package tech.adrianohrl.identistry.view.frames;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -25,7 +25,8 @@ import se.gustavkarlsson.gwiz.AbstractWizardPage;
 import se.gustavkarlsson.gwiz.Wizard;
 import se.gustavkarlsson.gwiz.WizardController;
 import tech.adrianohrl.dao.DataSource;
-import tech.adrianohrl.identistry.model.individuals.Genders;
+import tech.adrianohrl.identistry.control.dao.individuals.PatientDAO;
+import tech.adrianohrl.identistry.control.dao.individuals.PersonDAO;
 import tech.adrianohrl.identistry.model.individuals.Patient;
 import tech.adrianohrl.identistry.model.individuals.Person;
 import tech.adrianohrl.identistry.view.wizards.pages.PersonWizardPage;
@@ -185,7 +186,6 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void finishButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finishButtonActionPerformed
-        System.out.println("Anounce finish...");
         dispose();
     }//GEN-LAST:event_finishButtonActionPerformed
 
@@ -281,12 +281,14 @@ public class WizardFrame extends javax.swing.JFrame implements Wizard {
                 System.exit(0);
             }
         });
-        Person person = new Patient();
-        AbstractWizardPage page = new PersonWizardPage(em, person);
-        //page = new LoggableWizardPage(em, assistant);
+        PersonWizardPage page = new PersonWizardPage(em, new Patient(), new PatientDAO(em));
+        wizard.getFinishButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                page.register();
+            }
+        });
         controller.startWizard(page);
-        //em.close();
-        //DataSource.closeEntityManagerFactory();
     }
     
 }
